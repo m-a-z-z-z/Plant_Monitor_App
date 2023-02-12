@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "251495820778",
+    "firebase_url": "https://plant-monitor-64489-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "plant-monitor-64489",
+    "storage_bucket": "plant-monitor-64489.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251495820778:android:ad585bc49ca0cf9ccc5693",
+        "android_client_info": {
+          "package_name": "com.dmaziarek_tus.plant_monitor_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251495820778-s9vi6urli892jo72f8o4j47l9uh5lng5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBKQY64e_rVohBj-umzWq1vkOVEoRsvK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251495820778-s9vi6urli892jo72f8o4j47l9uh5lng5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
