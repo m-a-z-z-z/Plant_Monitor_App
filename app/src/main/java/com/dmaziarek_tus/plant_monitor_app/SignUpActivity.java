@@ -17,10 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText editText_UserName;
-    EditText editText_Email;
-    EditText editText_Password;
-    EditText editText_ConfirmPassword;
+    EditText editText_UserName, editText_Email, editText_Password, editText_ConfirmPassword;
     ProgressBar progressBar;
     private FirebaseAuth mAuth;
 
@@ -30,8 +27,8 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         editText_UserName = (EditText) findViewById(R.id.editText_UserName);
-        editText_Email = (EditText) findViewById(R.id.editText_Email);
-        editText_Password = (EditText) findViewById(R.id.editText_Password);
+        editText_Email = (EditText) findViewById(R.id.editText_EmailSignIn);
+        editText_Password = (EditText) findViewById(R.id.editText_PasswordSignIn);
         editText_ConfirmPassword = (EditText) findViewById(R.id.editText_ConfirmPassword);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         mAuth = FirebaseAuth.getInstance();
