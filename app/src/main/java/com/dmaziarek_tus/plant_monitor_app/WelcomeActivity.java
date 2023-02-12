@@ -48,12 +48,12 @@ public class WelcomeActivity extends AppCompatActivity {
         });
     }
 
-    public void onButtonSignUpClicked(View view) {
-//        Intent intent = new Intent(this, SignUpActivity.class);
-//        startActivity(intent);
+    public void loadSignUpActivity(View view) {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 
-    public void onButtonSignInClicked(View view) {
+    public void loadSignInActivity(View view) {
 //        Intent intent = new Intent(this, SignInActivity.class);
 //        startActivity(intent);
     }
