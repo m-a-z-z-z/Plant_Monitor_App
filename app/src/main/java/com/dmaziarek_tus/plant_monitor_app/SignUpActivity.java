@@ -3,6 +3,7 @@ package com.dmaziarek_tus.plant_monitor_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -80,6 +81,8 @@ public class SignUpActivity extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(SignUpActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
                                                 progressBar.setVisibility(View.GONE);
+                                                // redirect to login layout
+                                                loadSignInActivity(view);
                                             } else {
                                                 Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();
                                                 progressBar.setVisibility(View.GONE);
@@ -93,5 +96,10 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void loadSignInActivity(View view) {
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
     }
 }

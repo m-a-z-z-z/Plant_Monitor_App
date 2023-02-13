@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
         LottieAnimationView lottieAnimationView = findViewById(R.id.lottieAnimationView);
         TextView textView = findViewById(R.id.textViewSplash);
 
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // Animations for splash screen
