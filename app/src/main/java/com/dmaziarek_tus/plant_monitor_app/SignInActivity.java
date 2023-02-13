@@ -3,6 +3,7 @@ package com.dmaziarek_tus.plant_monitor_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -56,6 +57,9 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(SignInActivity.this, "Login successful", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
+
+                            // Load dashboard activity
+                            loadDashboardActivity(view);
                         }
                         else {
                             Toast.makeText(SignInActivity.this, "Login failed", Toast.LENGTH_LONG).show();
@@ -63,5 +67,10 @@ public class SignInActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void loadDashboardActivity(View view) {
+        Intent intent = new Intent(this, DashboardActivity.class);
+        startActivity(intent);
     }
 }

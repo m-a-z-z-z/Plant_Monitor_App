@@ -12,6 +12,15 @@
         android:theme="@style/Theme.Plant_Monitor_App"
         tools:targetApi="31">
         <activity
+            android:name=".PlantHealthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DrawerBaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".SignInActivity"
             android:exported="false" />
         <activity
