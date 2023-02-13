@@ -6,4 +6,100 @@
     android:layout_height="match_parent"
     tools:context=".PlantHealthActivity">
 
+    <TextView
+        android:id="@+id/textView_plantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant Name"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32999998" />
+
+    <TextView
+        android:id="@+id/textView_SoilMoistureLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Soil Moisture:"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toStartOf="@+id/textView_SoilMoistureValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_plantName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_plantName" />
+
+    <TextView
+        android:id="@+id/textView_SoilMoistureValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="@+id/textView_plantName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_plantName" />
+
+    <TextView
+        android:id="@+id/textView_SunlightLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Sunlight:"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toStartOf="@+id/textView_SunlightValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_plantName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_SoilMoistureLabel" />
+
+    <TextView
+        android:id="@+id/textView_SunlightValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="@+id/textView_plantName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_SoilMoistureValue" />
+
+    <TextView
+        android:id="@+id/textView_HumidityLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Humidity:"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toStartOf="@+id/textView_HumidityValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_plantName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_SunlightLabel" />
+
+    <TextView
+        android:id="@+id/textView_HumidityValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="@+id/textView_plantName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_SunlightValue" />
+
+    <TextView
+        android:id="@+id/textView_TemperatureLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Temperature:"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toStartOf="@+id/textView_TemperatureValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_plantName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_HumidityLabel" />
+
+    <TextView
+        android:id="@+id/textView_TemperatureValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="@+id/textView_plantName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_HumidityValue" />
 </androidx.constraintlayout.widget.ConstraintLayout>
