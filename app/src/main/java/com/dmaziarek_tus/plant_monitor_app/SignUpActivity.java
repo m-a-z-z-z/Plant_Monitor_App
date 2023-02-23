@@ -14,6 +14,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -21,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText editText_UserName, editText_Email, editText_Password, editText_ConfirmPassword;
     ProgressBar progressBar;
     private FirebaseAuth mAuth;
+    DataSnapshot snapshot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +77,14 @@ public class SignUpActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     User user = new User(userName, email, password);
+                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                    // Set username in Firebase
+//                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+//                            .setDisplayName(userName)
+//                            .build();
+//                    firebaseUser.updateProfile(profileUpdates);
                     FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
+                            .child(userName).setValue(user)// User will be saved under Users/(Username) in database rather than the UID
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
