@@ -79,10 +79,6 @@ public class SignUpActivity extends AppCompatActivity {
                     User user = new User(userName, email, password);
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
                     // Set username in Firebase
-//                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-//                            .setDisplayName(userName)
-//                            .build();
-//                    firebaseUser.updateProfile(profileUpdates);
                     FirebaseDatabase.getInstance().getReference("Users")
                             .child(userName).setValue(user)// User will be saved under Users/(Username) in database rather than the UID
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {

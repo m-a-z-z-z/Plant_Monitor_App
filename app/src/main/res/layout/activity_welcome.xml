@@ -21,20 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.45" />
 
-    <TextView
-        android:id="@+id/textView_slogan"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/slogan"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_welcome" />
-
     <Button
         android:id="@+id/buttonSignUp"
         android:layout_width="150dp"

@@ -3,6 +3,7 @@ package com.dmaziarek_tus.plant_monitor_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -19,10 +20,11 @@ import com.google.firebase.database.ValueEventListener;
 public class PlantHealthActivity extends DrawerBaseActivity {
 
     ActivityPlantHealthBinding binding;
-    TextView textView_SoilMoisture, textView_Sunlight, textView_Humidity, textView_Temperature;
+    TextView textView_SoilMoisture, textView_Sunlight, textView_Humidity, textView_Temperature, textView_readableHumid, textView_readableTemp, textView_plantName;
     FirebaseDatabase database;
     double soilMoistureVal, sunlightVal, humidityVal, temperatureVal;
-    String readableMoistureVal, readableSunlightVal, readableHumidityVal, readableTemperatureVal;
+    String readableMoistureVal, readableSunlightVal, readableHumidityVal, readableTemperatureVal, plantName;
+    DecimalFormat df = new DecimalFormat("#.##");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,9 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         textView_Sunlight = (TextView) findViewById(R.id.textView_SunlightValue);
         textView_Humidity = (TextView) findViewById(R.id.textView_HumidityValue);
         textView_Temperature = (TextView) findViewById(R.id.textView_TemperatureValue);
-
+        textView_readableHumid = (TextView) findViewById(R.id.textView_readableHumid);
+        textView_readableTemp = (TextView) findViewById(R.id.textView_readableTemp);
+        textView_plantName = (TextView) findViewById(R.id.textView_plantName);
         readPlantHealthValues();
     }
 
@@ -50,13 +54,13 @@ public class PlantHealthActivity extends DrawerBaseActivity {
                 humidityVal = Double.valueOf(snapshot.child("Temp_Humid/Humidity").getValue().toString());
                 temperatureVal = Double.valueOf(snapshot.child("Temp_Humid/Temperature").getValue().toString());
 
-                if (soilMoistureVal >= 300 && soilMoistureVal <= 450) {
+                if (soilMoistureVal >= 300 && soilMoistureVal <= 550) {
                     readableMoistureVal = "In water";
-                } else if (soilMoistureVal >= 450 && soilMoistureVal <= 600) {
+                } else if (soilMoistureVal >= 551 && soilMoistureVal <= 650) {
                     readableMoistureVal = "Moist";
-                } else if (soilMoistureVal >= 600 && soilMoistureVal <= 800) {
+                } else if (soilMoistureVal >= 651 && soilMoistureVal <= 700) {
                     readableMoistureVal = "Dry";
-                } else if (soilMoistureVal >= 800 && soilMoistureVal <= 1023) {
+                } else if (soilMoistureVal >= 701 && soilMoistureVal <= 1000) {
                     readableMoistureVal = "Very dry";
                 } else {
                     readableMoistureVal = "Error";
@@ -95,10 +99,13 @@ public class PlantHealthActivity extends DrawerBaseActivity {
                 }
 
                 // Set the text of the text views to the values from the database
-                textView_SoilMoisture.setText(soilMoistureVal + " " + readableMoistureVal);
-                textView_Sunlight.setText(sunlightVal + " " + readableSunlightVal);
-                textView_Humidity.setText(humidityVal + " " + readableHumidityVal);
-                textView_Temperature.setText(temperatureVal + " " + readableTemperatureVal);
+//                textView_plantName.setText(plantName);
+                textView_SoilMoisture.setText(soilMoistureVal + " - " + readableMoistureVal);
+                textView_Sunlight.setText(sunlightVal + " - " + readableSunlightVal);
+                textView_Humidity.setText(df.format(humidityVal) + "%");
+                textView_readableHumid.setText(readableHumidityVal);
+                textView_Temperature.setText(df.format(temperatureVal) + "°C");
+                textView_readableTemp.setText(readableTemperatureVal);
 
                 // For debugging purposes
                 Log.d("Soil Moisture: ", snapshot.child("Soil_Moisture").getValue().toString());
