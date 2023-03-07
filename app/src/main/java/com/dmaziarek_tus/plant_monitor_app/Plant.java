@@ -1,8 +1,7 @@
 package com.dmaziarek_tus.plant_monitor_app;
 
 public class Plant {
-    String name;
-    int soilMoisture;
+    int soil_Moisture;
     double irLight;
     double uvLight;
     double visLight;
@@ -10,11 +9,16 @@ public class Plant {
     double temperature;
 
     public Plant() {
+        this.soil_Moisture = 0;
+        this.irLight = 0;
+        this.uvLight = 0;
+        this.visLight = 0;
+        this.humidity = 0;
+        this.temperature = 0;
     }
 
-    public Plant(String name, int soilMoisture, double irLight, double uvLight, double visLight, double humidity, double temperature) {
-        this.name = name;
-        this.soilMoisture = soilMoisture;
+    public Plant(int soil_Moisture, double irLight, double uvLight, double visLight, double humidity, double temperature) {
+        this.soil_Moisture = soil_Moisture;
         this.irLight = irLight;
         this.uvLight = uvLight;
         this.visLight = visLight;
@@ -22,20 +26,12 @@ public class Plant {
         this.temperature = temperature;
     }
 
-    public String getName() {
-        return name;
+    public int getSoil_Moisture() {
+        return soil_Moisture;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getSoilMoisture() {
-        return soilMoisture;
-    }
-
-    public void setSoilMoisture(int soilMoisture) {
-        this.soilMoisture = soilMoisture;
+    public void setSoil_Moisture(int soil_Moisture) {
+        this.soil_Moisture = soil_Moisture;
     }
 
     public double getIrLight() {

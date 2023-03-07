@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,7 +25,7 @@ public class AddPlant extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference dbRef;
-    String userName;
+    String userName, plantName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +37,25 @@ public class AddPlant extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        dbRef = database.getReference("users");
+        dbRef = database.getReference("Users");
 
-        userName = getUserName();
+        userName = getUserName().trim();
+    }
+
+    // Add plant to database
+    public void onButtonAddPlantClicked(View view) {
+        plantName = editText_PlantName.getText().toString().trim();
+        Plant plant = new Plant();
+        dbRef.child(userName).child("Plants").child(plantName).setValue(plant)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(AddPlant.this, "Plant added successfully", Toast.LENGTH_LONG).show();
+                        Log.d("TAG", "onButtonAddPlantClicked - Plant added to database");
+                    } else {
+                        Toast.makeText(AddPlant.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
+                        Log.d("TAG", "onButtonAddPlantClicked - Plant not added to database");
+                    }
+                });
 
     }
 
