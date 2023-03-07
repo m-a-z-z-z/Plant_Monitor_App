@@ -47,15 +47,18 @@ public class AddPlant extends AppCompatActivity {
         plantName = editText_PlantName.getText().toString().trim();
         Plant plant = new Plant();
         dbRef.child(userName).child("Plants").child(plantName).setValue(plant)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(AddPlant.this, "Plant added successfully", Toast.LENGTH_LONG).show();
-                        Log.d("TAG", "onButtonAddPlantClicked - Plant added to database");
-                    } else {
-                        Toast.makeText(AddPlant.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
-                        Log.d("TAG", "onButtonAddPlantClicked - Plant not added to database");
-                    }
-                });
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(AddPlant.this, "Plant added successfully", Toast.LENGTH_LONG).show();
+                    Log.d("TAG", "onButtonAddPlantClicked - Plant added to database");
+                    editText_PlantName.setEnabled(false);
+                } else {
+                    Toast.makeText(AddPlant.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
+                    Log.d("TAG", "onButtonAddPlantClicked - Plant not added to database");
+                }
+            }
+        );
+
 
     }
 
