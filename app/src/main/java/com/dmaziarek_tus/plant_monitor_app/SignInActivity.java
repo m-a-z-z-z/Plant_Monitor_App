@@ -22,6 +22,7 @@ public class SignInActivity extends AppCompatActivity {
     EditText editText_emailSignIn, editText_passwordSignIn;
     ProgressBar progressBar;
     FirebaseAuth mAuth;
+    String email, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void onButtonSignInClicked(View view) {
-        String email = editText_emailSignIn.getText().toString().trim();
-        String password = editText_passwordSignIn.getText().toString().trim();
+        email = editText_emailSignIn.getText().toString().trim();
+        password = editText_passwordSignIn.getText().toString().trim();
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editText_emailSignIn.setError("Please enter a valid email");
@@ -51,6 +52,14 @@ public class SignInActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
+        // Sign in user if checks are passed
+        signInUser();
+
+        // Load dashboard activity
+        loadDashboardActivity(view);
+    }
+
+    private void signInUser() {
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -58,16 +67,14 @@ public class SignInActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Toast.makeText(SignInActivity.this, "Login successful", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
-
-                        // Load dashboard activity
-                        loadDashboardActivity(view);
                     }
                     else {
                         Toast.makeText(SignInActivity.this, "Login failed", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                     }
                 }
-            });
+            }
+        );
     }
 
     public void loadDashboardActivity(View view) {
