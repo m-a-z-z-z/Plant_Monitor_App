@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -51,22 +52,22 @@ public class SignInActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SignInActivity.this, "Login successful", Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.GONE);
+            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(SignInActivity.this, "Login successful", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
 
-                            // Load dashboard activity
-                            loadDashboardActivity(view);
-                        }
-                        else {
-                            Toast.makeText(SignInActivity.this, "Login failed", Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
+                        // Load dashboard activity
+                        loadDashboardActivity(view);
                     }
-                });
+                    else {
+                        Toast.makeText(SignInActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            });
     }
 
     public void loadDashboardActivity(View view) {
