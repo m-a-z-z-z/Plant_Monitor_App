@@ -58,8 +58,6 @@ public class AddPlant extends AppCompatActivity {
                 }
             }
         );
-
-
     }
 
     private String getUserName() {
