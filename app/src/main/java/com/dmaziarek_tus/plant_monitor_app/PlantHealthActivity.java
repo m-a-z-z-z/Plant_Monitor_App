@@ -49,8 +49,8 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                soilMoistureVal = Double.valueOf(snapshot.child("Soil_Moisture").getValue().toString());
-                sunlightVal = Double.valueOf(snapshot.child("Sunlight/Visible").getValue().toString());
+                soilMoistureVal = Double.valueOf(snapshot.child("soil_Moisture").getValue().toString());
+                sunlightVal = Double.valueOf(snapshot.child("visLight").getValue().toString());
                 humidityVal = Double.valueOf(snapshot.child("Temp_Humid/Humidity").getValue().toString());
                 temperatureVal = Double.valueOf(snapshot.child("Temp_Humid/Temperature").getValue().toString());
 
