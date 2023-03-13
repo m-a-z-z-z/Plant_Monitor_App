@@ -50,10 +50,17 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
                 startActivity(new Intent(this, PlantHealthActivity.class));
                 overridePendingTransition(0,0);
                 break;
-            case R.id.nav_addPlant:
-                startActivity(new Intent(this, AddPlant.class));
+            case R.id.nav_viewAddedPlants:
+                startActivity(new Intent(this, SelectPlantActivity.class));
                 overridePendingTransition(0,0);
                 break;
+            case R.id.nav_addPlant:
+                startActivity(new Intent(this, AddPlantActivity.class));
+                overridePendingTransition(0,0);
+                break;
+            case R.id.nav_logout:
+                startActivity(new Intent(this, LogoutActivity.class));
+                overridePendingTransition(0,0);
         }
         return false;
     }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="plant_types">
+        <item>Cactus</item>
+        <item>Flower</item>
+        <item>Succulent</item>
+        <item>Perennial</item>
+        <item>Tender Perennial</item>
+        <item>Tropical/Subtropical</item>
+    </string-array>
+</resources>

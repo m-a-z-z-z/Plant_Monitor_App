@@ -1,4 +1,4 @@
-package com.dmaziarek_tus.plant_monitor_app;
+package com.dmaziarek_tus.plant_monitor_app.model;
 
 import android.util.Log;
 
@@ -19,15 +19,15 @@ public class User {
     }
 
     public String getUserName() {
-        String displayName = null;
+        String fbDisplayName = null;
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            displayName = user.getDisplayName();
+        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (fbUser != null) {
+            fbDisplayName = fbUser.getDisplayName();
             // do something with the user's information
         }
-        Log.d("User Class", "getUserData - display name: " + displayName);
-        return displayName;
+        this.userName = fbDisplayName;
+        return userName;
     }
 
     public String getEmail() {

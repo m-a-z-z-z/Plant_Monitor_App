@@ -12,10 +12,13 @@
         android:theme="@style/Theme.Plant_Monitor_App"
         tools:targetApi="31">
         <activity
+            android:name=".LogoutActivity"
+            android:exported="false" />
+        <activity
             android:name=".SelectPlantActivity"
             android:exported="false" />
         <activity
-            android:name=".AddPlant"
+            android:name=".AddPlantActivity"
             android:exported="false" />
         <activity
             android:name=".PlantHealthActivity"

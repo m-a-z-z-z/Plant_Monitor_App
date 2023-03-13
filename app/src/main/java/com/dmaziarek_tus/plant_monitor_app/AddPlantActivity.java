@@ -1,39 +1,72 @@
 package com.dmaziarek_tus.plant_monitor_app;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityAddPlantBinding;
+import com.dmaziarek_tus.plant_monitor_app.model.Plant;
+import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class AddPlantActivity extends AppCompatActivity {
+public class AddPlantActivity extends DrawerBaseActivity {
+    ActivityAddPlantBinding binding;
     EditText editText_PlantName;
     Button button_AddPlant;
+    Spinner spinner;
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference dbRef;
-    String userName, plantName;
+    String userName, plantName, selectedPlantType, plantType;
+//    String[] plantTypes = {"Cactus", "Flower", "Succulent", "Tender Perennial", "Tropical/Subtropical"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_plant);
+        binding = ActivityAddPlantBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        allocateActivityTitle("Add Plant");
 
+        // Get UI elements
         editText_PlantName = (EditText) findViewById(R.id.editText_PlantName);
+        spinner = (Spinner) findViewById(R.id.spinner_PlantType);
         button_AddPlant = (Button) findViewById(R.id.button_AddPlant);
 
+        // Set spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.plant_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        // Respond to spinner selection
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedPlantType = parent.getItemAtPosition(position).toString();
+                Toast.makeText(AddPlantActivity.this, selectedPlantType, Toast.LENGTH_LONG).show();
+                Log.d("AddPlantActivity", "onItemSelected: " + selectedPlantType);
+                spinner.setOnItemSelectedListener(this);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // Get Firebase instances for sending data
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("Users");
 
+        // Get user to add plant under
         User user = new User();
         userName = user.getUserName().trim();
     }
@@ -41,7 +74,8 @@ public class AddPlantActivity extends AppCompatActivity {
     // Add plant to database
     public void onButtonAddPlantClicked(View view) {
         plantName = editText_PlantName.getText().toString().trim();
-        Plant plant = new Plant();
+        Plant plant = new Plant(plantName, selectedPlantType);
+        Log.d("AddPlantActivity", "onButtonAddPlantClicked: " + plantName + " " + selectedPlantType);
 
         dbRef.child(userName).child("Plants").child(plantName).setValue(plant)
             .addOnCompleteListener(task -> {

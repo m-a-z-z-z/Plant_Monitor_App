@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:text="Plant Monitor"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,8 +24,6 @@
         android:id="@+id/buttonSignUp"
         android:layout_width="150dp"
         android:layout_height="65dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="64dp"
         android:background="@drawable/button_sign_up"
         android:onClick="loadSignUpActivity"
         android:text="Sign Up"
@@ -35,22 +32,28 @@
         android:textStyle="bold"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/buttonSignIn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_welcome"
+        app:layout_constraintVertical_bias="0.7" />
 
     <Button
         android:id="@+id/buttonSignIn"
         android:layout_width="150dp"
         android:layout_height="65dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="64dp"
         android:background="@drawable/button_sign_in"
+        android:onClick="loadSignInActivity"
         android:text="Sign In"
         android:textColor="@color/black"
-        android:onClick="loadSignInActivity"
         android:textSize="20sp"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonSignUp"
+        app:layout_constraintTop_toBottomOf="@+id/textView_welcome"
+        app:layout_constraintVertical_bias="0.7" />
 
     <ImageView
         android:id="@+id/imageView"

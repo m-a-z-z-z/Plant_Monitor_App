@@ -6,17 +6,26 @@
             android:icon="@drawable/ic_dashboard"
             android:title="Dashboard"/>
         <item
+            android:id="@+id/nav_addPlant"
+            android:icon="@drawable/ic_add"
+            android:title="Add New Plant"/>
+        <item
+            android:id="@+id/nav_viewAddedPlants"
+            android:icon="@drawable/ic_2flowers"
+            android:title="Select Added Plants"/>
+        <item
             android:id="@+id/nav_plantHealthValues"
             android:icon="@drawable/ic_flower"
             android:title="View Plant Health"/>
         <item
             android:id="@+id/nav_plantStats"
             android:icon="@drawable/ic_stats"
-            android:title="Query Plant Stats"/>
+            android:title="Query Plant Stats"
+            android:enabled="false"/>
         <item
-            android:id="@+id/nav_addPlant"
-            android:icon="@drawable/ic_add"
-            android:title="Add New Plant"/>
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Logout"/>
     </group>
 
 </menu>
