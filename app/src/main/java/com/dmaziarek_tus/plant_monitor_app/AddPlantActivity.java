@@ -50,7 +50,6 @@ public class AddPlantActivity extends DrawerBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedPlantType = parent.getItemAtPosition(position).toString();
-                Toast.makeText(AddPlantActivity.this, selectedPlantType, Toast.LENGTH_LONG).show();
                 Log.d("AddPlantActivity", "onItemSelected: " + selectedPlantType);
                 spinner.setOnItemSelectedListener(this);
             }
