@@ -53,8 +53,9 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         Intent intent = getIntent();
         plantName = intent.getStringExtra("plantName");
         plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
+        Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
 
-        if (plantNameList.isEmpty()) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
+        if (plantNameList.isEmpty() || plantNameList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
             noPlantsAdded();
         }
         // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
@@ -73,6 +74,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
 
     public void noPlantsAdded() {
         Toast.makeText(this, "No plants added", Toast.LENGTH_SHORT).show();
+        Log.d("PlantHealthActivity", "onCreate - No plants added");
         Intent intent = new Intent(PlantHealthActivity.this, AddPlantActivity.class);
         startActivity(intent);
     }
