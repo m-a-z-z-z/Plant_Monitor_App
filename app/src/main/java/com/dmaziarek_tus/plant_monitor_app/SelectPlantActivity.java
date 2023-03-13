@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivitySelectPlantBinding;
-import com.dmaziarek_tus.plant_monitor_app.model.MySingleton;
+import com.dmaziarek_tus.plant_monitor_app.model.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         userName = user.getUserName().trim();
 
         // Set the array list from the singleton
-        plantNames = MySingleton.getInstance().getPlantNames();
+        plantNames = PlantNamesSingleton.getInstance().getPlantNames();
         Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNames);
 
         for (int i = 1; i < plantNames.size()+1; i++) {

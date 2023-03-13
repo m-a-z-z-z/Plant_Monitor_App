@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityAddPlantBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
+import com.dmaziarek_tus.plant_monitor_app.model.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -25,8 +26,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference dbRef;
-    String userName, plantName, selectedPlantType, plantType;
-//    String[] plantTypes = {"Cactus", "Flower", "Succulent", "Tender Perennial", "Tropical/Subtropical"};
+    String userName, plantName, selectedPlantType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
     // Add plant to database
     public void onButtonAddPlantClicked(View view) {
         plantName = editText_PlantName.getText().toString().trim();
+        PlantNamesSingleton.getInstance().addPlantName(plantName);
         Plant plant = new Plant(plantName, selectedPlantType);
         Log.d("AddPlantActivity", "onButtonAddPlantClicked: " + plantName + " " + selectedPlantType);
 
@@ -80,11 +81,11 @@ public class AddPlantActivity extends DrawerBaseActivity {
             .addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(AddPlantActivity.this, "Plant added successfully", Toast.LENGTH_LONG).show();
-                    Log.d("TAG", "onButtonAddPlantClicked - Plant added to database");
+                    Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant added to database");
                     editText_PlantName.setEnabled(false);
                 } else {
                     Toast.makeText(AddPlantActivity.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
-                    Log.d("TAG", "onButtonAddPlantClicked - Plant not added to database");
+                    Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant not added to database");
                 }
             }
         );

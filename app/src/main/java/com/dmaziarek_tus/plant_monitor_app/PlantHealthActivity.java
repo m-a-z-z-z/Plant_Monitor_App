@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityPlantHealthBinding;
-import com.dmaziarek_tus.plant_monitor_app.model.MySingleton;
+import com.dmaziarek_tus.plant_monitor_app.model.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,6 +52,16 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         // Get plant name from previous activity
         Intent intent = getIntent();
         plantName = intent.getStringExtra("plantName");
+
+        // If user goes straight to view plant health and not through select plant, then plantName will be null.
+        // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
+        if (plantName == null || plantName.isEmpty() || plantName == "") {
+            plantNames = PlantNamesSingleton.getInstance().getPlantNames();
+            for (String plantName: plantNames) {
+                Log.d("PlantHealthActivity", "Plant name: " + plantName);
+            }
+            plantName = plantNames.get(0);  // Get the first plant name from the array list
+        }
 
         readPlantHealthValues();
     }

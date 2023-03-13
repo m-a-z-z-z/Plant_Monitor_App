@@ -12,17 +12,12 @@ import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityLogoutBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LogoutActivity extends DrawerBaseActivity {
-    ActivityLogoutBinding binding;
     FirebaseAuth mAuth;
-    Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityLogoutBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        allocateActivityTitle("Logging out");
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_logout);
 
         mAuth.getInstance().signOut(); // sign out of firebase
 
@@ -30,7 +25,7 @@ public class LogoutActivity extends DrawerBaseActivity {
             @Override
             public void run() {
                 try {
-                    sleep(2000);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
