@@ -19,10 +19,6 @@ import java.util.ArrayList;
 public class DashboardActivity extends DrawerBaseActivity {
 
     ActivityDashboardBinding binding;
-//    FirebaseDatabase database;
-//    DatabaseReference myRef;
-//    String userName;
-//    ArrayList<String> plantNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,31 +26,5 @@ public class DashboardActivity extends DrawerBaseActivity {
         binding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         allocateActivityTitle("Dashboard");
-
-//        User user = new User();
-//        userName = user.getUserName();
-//        Log.d("DashboardActivity", "onCreate - display name: " + userName);
-//        database = FirebaseDatabase.getInstance();
-//        myRef = database.getReference("Users/" + userName + "/Plants");
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Iterable<DataSnapshot> children = snapshot.getChildren();
-//
-//                for (DataSnapshot child : children) {
-//                    String plantName = child.getKey();
-//                    plantNames.add(plantName);
-//                    Log.d("DashboardActivity", "onDataChange - Plant name: " + plantName);
-//                }
-//                Log.d("DashboardActivity", "onDataChange - Plant names: " + plantNames);
-//
-//                MySingleton.getInstance().setPlantNames(plantNames);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.d("DashboardActivity", "onCancelled - Error: " + error.getMessage());
-//            }
-//        });
     }
 }
