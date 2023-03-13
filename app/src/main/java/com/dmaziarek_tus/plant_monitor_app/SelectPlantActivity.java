@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class SelectPlantActivity extends DrawerBaseActivity {
     ActivitySelectPlantBinding binding;
     String userName;
-    ArrayList<String> plantNames = new ArrayList<>();
+    ArrayList<String> plantNameList = new ArrayList<>();
     CardView cardView1, cardview2, cardview3, cardView4;
     TextView cardviewText1, cardviewText2, cardviewText3, cardviewText4;
 
@@ -41,10 +41,10 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         userName = user.getUserName().trim();
 
         // Set the array list from the singleton
-        plantNames = PlantNamesSingleton.getInstance().getPlantNames();
-        Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNames);
+        plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
+        Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
 
-        for (int i = 1; i < plantNames.size()+1; i++) {
+        for (int i = 1; i < plantNameList.size()+1; i++) {
             String cardviewName = "card_view" + i;
             String textviewName = "cardview_text" + i;
             int resID = getResources().getIdentifier(cardviewName, "id", getPackageName());
@@ -53,7 +53,7 @@ public class SelectPlantActivity extends DrawerBaseActivity {
             CardView cardView = (CardView) findViewById(resID);
             cardView.setVisibility(View.VISIBLE);
             TextView textView = (TextView) findViewById(resID2);
-            textView.setText(plantNames.get(i-1));
+            textView.setText(plantNameList.get(i-1));
         }
     }
 

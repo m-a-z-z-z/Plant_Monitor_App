@@ -27,7 +27,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
     double soilMoistureVal, sunlightVal, humidityVal, temperatureVal;
     String readableMoistureVal, readableSunlightVal, readableHumidityVal, readableTemperatureVal, plantName, plantType, userName;
     DecimalFormat df = new DecimalFormat("#.##");
-    ArrayList<String> plantNames = new ArrayList<>();
+    ArrayList<String> plantNameList = new ArrayList<>();
 
 
     @Override
@@ -52,18 +52,29 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         // Get plant name from previous activity
         Intent intent = getIntent();
         plantName = intent.getStringExtra("plantName");
+        plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
 
-        // If user goes straight to view plant health and not through select plant, then plantName will be null.
+        if (plantNameList.isEmpty()) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
+            noPlantsAdded();
+        }
+        // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
         // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
-        if (plantName == null || plantName.isEmpty() || plantName == "") {
-            plantNames = PlantNamesSingleton.getInstance().getPlantNames();
-            for (String plantName: plantNames) {
+        else if (plantName == null || plantName.isEmpty() || plantName == "") {
+            for (String plantName: plantNameList) {
                 Log.d("PlantHealthActivity", "Plant name: " + plantName);
             }
-            plantName = plantNames.get(0);  // Get the first plant name from the array list
+            plantName = plantNameList.get(0);  // Get the first plant name from the array list
+        }
+        else {
+            readPlantHealthValues();
         }
 
-        readPlantHealthValues();
+    }
+
+    public void noPlantsAdded() {
+        Toast.makeText(this, "No plants added", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(PlantHealthActivity.this, AddPlantActivity.class);
+        startActivity(intent);
     }
 
     public void readPlantHealthValues() {

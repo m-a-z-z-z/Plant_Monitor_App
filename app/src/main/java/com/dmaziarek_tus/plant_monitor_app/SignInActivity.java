@@ -34,7 +34,7 @@ public class SignInActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference myRef;
     String email, password, userName;
-    ArrayList<String> plantNames = new ArrayList<>();
+    ArrayList<String> plantNameList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,12 +123,12 @@ public class SignInActivity extends AppCompatActivity {
 
                 for (DataSnapshot child : children) {
                     String plantName = child.getKey();
-                    plantNames.add(plantName);
+                    plantNameList.add(plantName);
                     Log.d("SignInActivity", "onDataChange - Plant name: " + plantName);
                 }
-                Log.d("SignInActivity", "onDataChange - Plant names: " + plantNames);
+                Log.d("SignInActivity", "onDataChange - Plant names: " + plantNameList);
 
-                PlantNamesSingleton.getInstance().setPlantNames(plantNames);
+                PlantNamesSingleton.getInstance().setPlantNames(plantNameList);
                 myRef.removeEventListener(this);    // Remove listener to prevent multiple calls
             }
 

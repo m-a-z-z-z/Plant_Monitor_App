@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PlantNamesSingleton {
     private static PlantNamesSingleton instance = null;
-    private ArrayList<String> plantNames;
+    private ArrayList<String> plantNameList;
 
     private PlantNamesSingleton() {}
 
@@ -17,16 +17,16 @@ public class PlantNamesSingleton {
 
     // Used when the user needs to retrieve all the plants they have added
     public ArrayList<String> getPlantNames() {
-        return plantNames;
+        return plantNameList;
     }
 
     // Used when the user adds a new plant
     public void addPlantName(String plantName) {
-        plantNames.add(plantName);
+        plantNameList.add(plantName);
     }
 
     // Should only be called once when the user signs in
     public void setPlantNames(ArrayList<String> plantNames) {
-        this.plantNames = plantNames;
+        this.plantNameList = plantNames;
     }
 }
