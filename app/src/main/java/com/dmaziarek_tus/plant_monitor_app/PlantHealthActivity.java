@@ -61,10 +61,9 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
         // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
         else if (plantName == null || plantName.isEmpty() || plantName == "") {
-            for (String plantName: plantNameList) {
-                Log.d("PlantHealthActivity", "Plant name: " + plantName);
-            }
+            Log.d("PlantHealthActivity", "Plant names: " + plantNameList);
             plantName = plantNameList.get(0);  // Get the first plant name from the array list
+            readPlantHealthValues();
         }
         else {
             readPlantHealthValues();
