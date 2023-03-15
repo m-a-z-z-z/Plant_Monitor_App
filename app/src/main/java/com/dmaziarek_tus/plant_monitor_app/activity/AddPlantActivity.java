@@ -1,4 +1,4 @@
-package com.dmaziarek_tus.plant_monitor_app;
+package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,9 +10,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityAddPlantBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
-import com.dmaziarek_tus.plant_monitor_app.model.PlantNamesSingleton;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;

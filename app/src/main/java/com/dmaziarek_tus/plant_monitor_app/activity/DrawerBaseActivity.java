@@ -1,4 +1,4 @@
-package com.dmaziarek_tus.plant_monitor_app;
+package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -8,12 +8,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.dmaziarek_tus.plant_monitor_app.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class DrawerBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,6 +55,10 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
                 break;
             case R.id.nav_addPlant:
                 startActivity(new Intent(this, AddPlantActivity.class));
+                overridePendingTransition(0,0);
+                break;
+            case R.id.nav_historicalData:
+                startActivity(new Intent(this, HistoricalDataActivity.class));
                 overridePendingTransition(0,0);
                 break;
             case R.id.nav_logout:

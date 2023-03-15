@@ -18,10 +18,9 @@
             android:icon="@drawable/ic_flower"
             android:title="View Plant Health"/>
         <item
-            android:id="@+id/nav_plantStats"
+            android:id="@+id/nav_historicalData"
             android:icon="@drawable/ic_stats"
-            android:title="Query Plant Stats"
-            android:enabled="false"/>
+            android:title="Historical Data Charts" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"

@@ -1,4 +1,4 @@
-package com.dmaziarek_tus.plant_monitor_app;
+package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +12,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.dmaziarek_tus.plant_monitor_app.model.PlantNamesSingleton;
+import com.dmaziarek_tus.plant_monitor_app.R;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

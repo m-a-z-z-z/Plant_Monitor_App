@@ -1,4 +1,4 @@
-package com.dmaziarek_tus.plant_monitor_app;
+package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import androidx.cardview.widget.CardView;
 
@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivitySelectPlantBinding;
-import com.dmaziarek_tus.plant_monitor_app.model.PlantNamesSingleton;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 
 import java.util.ArrayList;
 
@@ -45,7 +47,7 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
         Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
         if (plantNameList.isEmpty() || plantNameList == null) {
-            noPlantsAdded();
+            PlantUtils.noPlantsAdded(this);
         }
 
         for (int i = 1; i < plantNameList.size()+1; i++) {
@@ -59,13 +61,6 @@ public class SelectPlantActivity extends DrawerBaseActivity {
             TextView textView = (TextView) findViewById(resID2);
             textView.setText(plantNameList.get(i-1));
         }
-    }
-
-    public void noPlantsAdded() {
-        Toast.makeText(this, "No plants added", Toast.LENGTH_SHORT).show();
-        Log.d("SelectPlantActivity", "onCreate - No plants added");
-        Intent intent = new Intent(SelectPlantActivity.this, AddPlantActivity.class);
-        startActivity(intent);
     }
 
     public void cardView1Clicked(View view) {

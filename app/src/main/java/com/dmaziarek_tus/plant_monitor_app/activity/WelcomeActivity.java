@@ -1,20 +1,12 @@
-package com.dmaziarek_tus.plant_monitor_app;
-
-import static android.content.ContentValues.TAG;
+package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.dmaziarek_tus.plant_monitor_app.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 

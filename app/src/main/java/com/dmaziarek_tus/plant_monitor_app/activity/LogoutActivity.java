@@ -1,14 +1,9 @@
-package com.dmaziarek_tus.plant_monitor_app;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 
-import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityLogoutBinding;
+import com.dmaziarek_tus.plant_monitor_app.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LogoutActivity extends DrawerBaseActivity {

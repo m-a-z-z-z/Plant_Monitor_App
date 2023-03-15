@@ -12,34 +12,37 @@
         android:theme="@style/Theme.Plant_Monitor_App"
         tools:targetApi="31">
         <activity
-            android:name=".LogoutActivity"
+            android:name=".activity.HistoricalDataActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectPlantActivity"
+            android:name=".activity.LogoutActivity"
             android:exported="false" />
         <activity
-            android:name=".AddPlantActivity"
+            android:name=".activity.SelectPlantActivity"
             android:exported="false" />
         <activity
-            android:name=".PlantHealthActivity"
+            android:name=".activity.AddPlantActivity"
             android:exported="false" />
         <activity
-            android:name=".DrawerBaseActivity"
+            android:name=".activity.PlantHealthActivity"
             android:exported="false" />
         <activity
-            android:name=".DashboardActivity"
+            android:name=".activity.DrawerBaseActivity"
             android:exported="false" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".activity.DashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".activity.SignInActivity"
             android:exported="false" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".activity.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".activity.WelcomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +50,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>

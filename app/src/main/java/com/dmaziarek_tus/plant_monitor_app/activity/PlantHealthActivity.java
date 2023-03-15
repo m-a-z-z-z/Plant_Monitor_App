@@ -1,4 +1,4 @@
-package com.dmaziarek_tus.plant_monitor_app;
+package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import androidx.annotation.NonNull;
 
@@ -9,9 +9,11 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityPlantHealthBinding;
-import com.dmaziarek_tus.plant_monitor_app.model.PlantNamesSingleton;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,7 +58,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
 
         if (plantNameList.isEmpty() || plantNameList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
-            noPlantsAdded();
+            PlantUtils.noPlantsAdded(this);
         }
         // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
         // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
@@ -71,12 +73,12 @@ public class PlantHealthActivity extends DrawerBaseActivity {
 
     }
 
-    public void noPlantsAdded() {
-        Toast.makeText(this, "No plants added", Toast.LENGTH_SHORT).show();
-        Log.d("PlantHealthActivity", "onCreate - No plants added");
-        Intent intent = new Intent(PlantHealthActivity.this, AddPlantActivity.class);
-        startActivity(intent);
-    }
+//    public void noPlantsAdded() {
+//        Toast.makeText(this, "No plants added", Toast.LENGTH_SHORT).show();
+//        Log.d("PlantHealthActivity", "onCreate - No plants added");
+//        Intent intent = new Intent(PlantHealthActivity.this, AddPlantActivity.class);
+//        startActivity(intent);
+//    }
 
     public void readPlantHealthValues() {
         database = FirebaseDatabase.getInstance();

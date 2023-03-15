@@ -1,4 +1,4 @@
-package com.dmaziarek_tus.plant_monitor_app.model;
+package com.dmaziarek_tus.plant_monitor_app.util;
 
 import java.util.ArrayList;
 
