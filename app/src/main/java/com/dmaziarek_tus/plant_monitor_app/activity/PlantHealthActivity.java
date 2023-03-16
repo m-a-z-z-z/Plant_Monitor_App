@@ -57,7 +57,10 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
         Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
 
-        if (plantNameList.isEmpty() || plantNameList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
+        // I know this looks dumb but the app would crash every time if plantNameList == Null or plantNameList.isEmpty() was in one if statement
+        if (plantNameList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
+            PlantUtils.noPlantsAdded(this);
+        } else if (plantNameList.isEmpty()) {
             PlantUtils.noPlantsAdded(this);
         }
         // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.

@@ -6,15 +6,161 @@
     android:layout_height="match_parent"
     tools:context=".activity.DashboardActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:alignmentMode="alignMargins"
+                    android:columnCount="1"
+                    android:rowCount="2">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_addPlant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="6dp"
+                        android:onClick="onDashboardCVClick">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/ic_add" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="Add New Plant"
+                                android:textSize="18dp"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_viewAddedPlants"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="6dp"
+                        android:onClick="onDashboardCVClick">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/ic_2flowers" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="Select Plant"
+                                android:textSize="18dp"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_plantHealthValues"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="6dp"
+                        android:onClick="onDashboardCVClick">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/ic_flower" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="View Plant Health"
+                                android:textSize="18dp"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_historicalData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="6dp"
+                        android:onClick="onDashboardCVClick">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/ic_stats" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="View Historical Data"
+                                android:textSize="18dp"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                </GridLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

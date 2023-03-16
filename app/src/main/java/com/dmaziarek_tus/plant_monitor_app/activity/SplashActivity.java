@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.dmaziarek_tus.plant_monitor_app.R;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class SplashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     if (mAuth.getCurrentUser() != null) {
+                        PlantUtils.retrieveUserPlants();    // When user restarts app, plantNameList will null, so we need to retrieve the list again
                         Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
                         startActivity(intent);
                         finish();   // finish() is used to destroy the activity, will stop the user navigating back to the splash screen

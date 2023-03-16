@@ -46,20 +46,26 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         // Set the array list from the singleton
         plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
         Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
-        if (plantNameList.isEmpty() || plantNameList == null) {
+
+        // I know this looks dumb but the app would crash every time if plantNameList == Null || plantNameList.isEmpty() was in one if statement
+        if (plantNameList == null) {    // This should never be null after adding PlantUtils.retrievePlantNames() to splash screen, but just in case
             PlantUtils.noPlantsAdded(this);
-        }
+            Log.d("SelectPlantActivity", "onCreate - No plants added, launching add plant activity");
+        } else if (plantNameList.isEmpty()) {
+            PlantUtils.noPlantsAdded(this);
+            Log.d("SelectPlantActivity", "onCreate - No plants added, launching add plant activity");
+        } else {
+            for (int i = 1; i < plantNameList.size()+1; i++) {
+                String cardviewName = "card_view" + i;
+                String textviewName = "cardview_text" + i;
+                int resID = getResources().getIdentifier(cardviewName, "id", getPackageName());
+                int resID2 = getResources().getIdentifier(textviewName, "id", getPackageName());
 
-        for (int i = 1; i < plantNameList.size()+1; i++) {
-            String cardviewName = "card_view" + i;
-            String textviewName = "cardview_text" + i;
-            int resID = getResources().getIdentifier(cardviewName, "id", getPackageName());
-            int resID2 = getResources().getIdentifier(textviewName, "id", getPackageName());
-
-            CardView cardView = (CardView) findViewById(resID);
-            cardView.setVisibility(View.VISIBLE);
-            TextView textView = (TextView) findViewById(resID2);
-            textView.setText(plantNameList.get(i-1));
+                CardView cardView = (CardView) findViewById(resID);
+                cardView.setVisibility(View.VISIBLE);
+                TextView textView = (TextView) findViewById(resID2);
+                textView.setText(plantNameList.get(i-1));
+            }
         }
     }
 

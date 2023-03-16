@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -72,16 +73,16 @@ public class SignInActivity extends AppCompatActivity {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                try {
-                    sleep(2500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    // Load dashboard activity
-                    retrieveUserPlants();
-                    // Load dashboard activity
-                    loadDashboardActivity(view);
-                }
+            try {
+                sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                // Load dashboard activity
+                PlantUtils.retrieveUserPlants();
+                // Load dashboard activity
+                loadDashboardActivity(view);
+            }
             }
         };
         thread.start();
@@ -109,35 +110,35 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void retrieveUserPlants() {
-        // Get username to use for reference in database to retrieve users plants
-        User user = new User();
-        userName = user.getUserName();
-        Log.d("SignInActivity", "retrieveUserPlants - display name: " + userName);
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("Users/" + userName + "/Plants");
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Iterable<DataSnapshot> children = snapshot.getChildren();
-
-                for (DataSnapshot child : children) {
-                    String plantName = child.getKey();
-                    plantNameList.add(plantName);
-                    Log.d("SignInActivity", "onDataChange - Plant name: " + plantName);
-                }
-                Log.d("SignInActivity", "onDataChange - Plant names: " + plantNameList);
-
-                PlantNamesSingleton.getInstance().setPlantNames(plantNameList);
-                myRef.removeEventListener(this);    // Remove listener to prevent multiple calls
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("SignInActivity", "onCancelled - Error: " + error.getMessage());
-            }
-        });
-
-    }
+//    public void retrieveUserPlants() {
+//        // Get username to use for reference in database to retrieve users plants
+//        User user = new User();
+//        userName = user.getUserName();
+//        Log.d("SignInActivity", "retrieveUserPlants - display name: " + userName);
+//        database = FirebaseDatabase.getInstance();
+//        myRef = database.getReference("Users/" + userName + "/Plants");
+//
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Iterable<DataSnapshot> children = snapshot.getChildren();
+//
+//                for (DataSnapshot child : children) {
+//                    String plantName = child.getKey();
+//                    plantNameList.add(plantName);
+//                    Log.d("SignInActivity", "onDataChange - Plant name: " + plantName);
+//                }
+//                Log.d("SignInActivity", "onDataChange - Plant names: " + plantNameList);
+//
+//                PlantNamesSingleton.getInstance().setPlantNames(plantNameList);
+//                myRef.removeEventListener(this);    // Remove listener to prevent multiple calls
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.d("SignInActivity", "onCancelled - Error: " + error.getMessage());
+//            }
+//        });
+//
+//    }
 }

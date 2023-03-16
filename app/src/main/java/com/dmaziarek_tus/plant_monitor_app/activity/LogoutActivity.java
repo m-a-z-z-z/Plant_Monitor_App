@@ -19,15 +19,15 @@ public class LogoutActivity extends DrawerBaseActivity {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    Intent intent = new Intent(LogoutActivity.this, WelcomeActivity.class);
-                    startActivity(intent);
-                    finish();   // finish() is used to destroy the activity, will stop the user navigating back to the splash screen
-                }
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                Intent intent = new Intent(LogoutActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+                finish();   // finish() is used to destroy the activity, will stop the user navigating back to the splash screen
+            }
             }
         };
         thread.start();
