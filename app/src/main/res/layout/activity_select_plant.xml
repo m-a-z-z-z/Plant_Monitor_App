@@ -24,7 +24,7 @@
                 app:cardElevation="10dp"
                 android:visibility="gone"
                 app:cardCornerRadius="16dp"
-                android:onClick="cardView1Clicked">
+                android:onClick="onPlantCardViewClicked">
 
                 <ImageView
                     android:id="@+id/img_plant1"
@@ -59,7 +59,7 @@
                 app:cardElevation="10dp"
                 android:visibility="gone"
                 app:cardCornerRadius="16dp"
-                android:onClick="cardView2Clicked">
+                android:onClick="onPlantCardViewClicked">
 
                 <ImageView
                     android:id="@+id/img_plant2"
@@ -94,7 +94,7 @@
                 app:cardElevation="10dp"
                 android:visibility="gone"
                 app:cardCornerRadius="16dp"
-                android:onClick="cardView3Clicked">
+                android:onClick="onPlantCardViewClicked">
 
                 <ImageView
                     android:id="@+id/img_plant3"
@@ -129,7 +129,7 @@
                 app:cardElevation="10dp"
                 android:visibility="gone"
                 app:cardCornerRadius="16dp"
-                android:onClick="cardView4Clicked">
+                android:onClick="onPlantCardViewClicked">
 
                 <ImageView
                     android:id="@+id/img_plant4"
@@ -153,6 +153,214 @@
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view5"
+                android:layout_width="325dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="10dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                android:onClick="onPlantCardViewClicked">
+
+                <ImageView
+                    android:id="@+id/img_plant5"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="top|center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/flower_bee"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/cardview_text5"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:text=""
+                    android:paddingTop="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/shadow"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view6"
+                android:layout_width="325dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="10dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                android:onClick="onPlantCardViewClicked">
+
+                <ImageView
+                    android:id="@+id/img_plant6"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="top|center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/flower_bee"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/cardview_text6"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:text=""
+                    android:paddingTop="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/shadow"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view7"
+                android:layout_width="325dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="10dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                android:onClick="onPlantCardViewClicked">
+
+                <ImageView
+                    android:id="@+id/img_plant7"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="top|center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/flower_bee"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/cardview_text7"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:text=""
+                    android:paddingTop="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/shadow"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view8"
+                android:layout_width="325dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="10dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                android:onClick="onPlantCardViewClicked">
+
+                <ImageView
+                    android:id="@+id/img_plant8"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="top|center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/flower_bee"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/cardview_text8"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:text=""
+                    android:paddingTop="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/shadow"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view9"
+                android:layout_width="325dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="10dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                android:onClick="onPlantCardViewClicked">
+
+                <ImageView
+                    android:id="@+id/img_plant9"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="top|center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/flower_bee"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/cardview_text9"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:text=""
+                    android:paddingTop="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/shadow"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view10"
+                android:layout_width="325dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="10dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                android:onClick="onPlantCardViewClicked">
+
+                <ImageView
+                    android:id="@+id/img_plant10"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="top|center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/flower_bee"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/cardview_text10"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:text=""
+                    android:paddingTop="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/shadow"/>
+            </androidx.cardview.widget.CardView>
+
+
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

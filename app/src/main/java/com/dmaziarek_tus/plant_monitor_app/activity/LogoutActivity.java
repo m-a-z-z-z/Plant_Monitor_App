@@ -16,6 +16,7 @@ public class LogoutActivity extends DrawerBaseActivity {
 
         mAuth.getInstance().signOut(); // sign out of firebase
 
+        // No real need for this thread. Just looks nice to have the signing out screen visible for a second
         Thread thread = new Thread() {
             @Override
             public void run() {

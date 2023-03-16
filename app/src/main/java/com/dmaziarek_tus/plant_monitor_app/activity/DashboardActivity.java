@@ -13,7 +13,6 @@ import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 public class DashboardActivity extends DrawerBaseActivity {
 
     ActivityDashboardBinding binding;
-    CardView cv_plantHealthValues, cv_viewAddedPlants, cv_addPlant, cv_historicalData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +20,6 @@ public class DashboardActivity extends DrawerBaseActivity {
         binding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         allocateActivityTitle("Dashboard");
-
-        cv_plantHealthValues = (CardView) findViewById(R.id.cv_plantHealthValues);
-        cv_viewAddedPlants = (CardView) findViewById(R.id.cv_viewAddedPlants);
-        cv_addPlant = (CardView) findViewById(R.id.cv_addPlant);
-        cv_historicalData = (CardView) findViewById(R.id.cv_historicalData);
 
     }
 

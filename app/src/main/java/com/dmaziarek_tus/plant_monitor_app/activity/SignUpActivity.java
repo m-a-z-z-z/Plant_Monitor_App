@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 public class SignUpActivity extends AppCompatActivity {
     EditText editText_UserName, editText_Email, editText_Password, editText_ConfirmPassword;
     ProgressBar progressBar;
+    Button button_SignUp;
     private FirebaseAuth mAuth;
     DataSnapshot snapshot;
     String userName, email, password, confirmPassword;
@@ -43,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
         editText_Password = (EditText) findViewById(R.id.editText_PasswordSignIn);
         editText_ConfirmPassword = (EditText) findViewById(R.id.editText_ConfirmPassword);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        button_SignUp = (Button) findViewById(R.id.button_signUp);
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -77,6 +80,8 @@ public class SignUpActivity extends AppCompatActivity {
             editText_ConfirmPassword.requestFocus();
             return;
         }
+
+        button_SignUp.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
         // If checks pass, register user
@@ -84,6 +89,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Redirect to sign in activity
         loadSignInActivity(view);
+
+        finish();   // Close sign up activity
     }
 
     private void registerUser() {
@@ -91,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    User user = new User(userName, email, password);
+                    User user = new User(userName, email);
                     FirebaseUser fbUser = mAuth.getCurrentUser();
                     setDisplayName(fbUser, userName);
 
@@ -107,6 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     } else {
                                         Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
+                                        button_SignUp.setVisibility(View.VISIBLE);
                                     }
                                 }
                             });
@@ -129,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Log.d("TAG", "User profile updated.");
+                        Log.d("SignUpActivity", "User profile updated.");
                     }
                 }
             });

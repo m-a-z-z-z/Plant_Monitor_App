@@ -58,7 +58,8 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
 
         // I know this looks dumb but the app would crash every time if plantNameList == Null or plantNameList.isEmpty() was in one if statement
-        if (plantNameList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
+        // If the plant name list is empty, user will be redirected to add plants activity
+        if (plantNameList == null) {
             PlantUtils.noPlantsAdded(this);
         } else if (plantNameList.isEmpty()) {
             PlantUtils.noPlantsAdded(this);
@@ -75,13 +76,6 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         }
 
     }
-
-//    public void noPlantsAdded() {
-//        Toast.makeText(this, "No plants added", Toast.LENGTH_SHORT).show();
-//        Log.d("PlantHealthActivity", "onCreate - No plants added");
-//        Intent intent = new Intent(PlantHealthActivity.this, AddPlantActivity.class);
-//        startActivity(intent);
-//    }
 
     public void readPlantHealthValues() {
         database = FirebaseDatabase.getInstance();

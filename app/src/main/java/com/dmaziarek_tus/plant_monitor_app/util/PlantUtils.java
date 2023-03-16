@@ -28,6 +28,12 @@ public class PlantUtils {
         activityContext.startActivity(intent);
     }
 
+    public static void plantSelected(Context activityContext, String plantName) {
+        Intent intent = new Intent(activityContext, PlantHealthActivity.class);
+        intent.putExtra("plantName", plantName);
+        activityContext.startActivity(intent);
+    }
+
     public static void retrieveUserPlants() {
         // Get username to use for reference in database to retrieve users plants
         User user = new User();

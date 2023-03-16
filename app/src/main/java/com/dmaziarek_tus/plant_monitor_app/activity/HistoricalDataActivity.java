@@ -57,30 +57,32 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
         plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
         Log.d("HistoricalDataActivity", "plantName: " + plantName);
 
-//        if (plantNameList.isEmpty() || plantNameList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
-//            PlantUtils.noPlantsAdded(HistoricalDataActivity.this);
-//        }
-//        // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
-//        // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
-//        else if (plantName == null || plantName.isEmpty() || plantName == "") {
-//            Log.d("PlantHealthActivity", "Plant names: " + plantNameList);
-//            plantName = plantNameList.get(0);  // Get the first plant name from the array list
-//             retrieveDataAndPopulateCharts();
-//        }
-//        else {
-//             retrieveDataAndPopulateCharts();
-//        }
+        if (plantNameList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
+            PlantUtils.noPlantsAdded(HistoricalDataActivity.this);
+        } else if (plantNameList.isEmpty()) {
+            PlantUtils.noPlantsAdded(HistoricalDataActivity.this);
+        }
+        // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
+        // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
+        else if (plantName == null || plantName.isEmpty() || plantName == "") {
+            Log.d("PlantHealthActivity", "Plant names: " + plantNameList);
+            plantName = plantNameList.get(0);  // Get the first plant name from the array list
+             retrieveDataAndPopulateCharts();
+        }
+        else {
+             retrieveDataAndPopulateCharts();
+        }
 
         Thread thread = new Thread() {
             @Override
             public void run() {
-                try {
-                    sleep(2500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    retrieveDataAndPopulateCharts();
-                }
+            try {
+                sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                retrieveDataAndPopulateCharts();
+            }
             }
         };
         thread.start();
@@ -102,15 +104,15 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
-        lineChart.getLegend().setEnabled(false);
-        lineChart.getDescription().setEnabled(false);
+        lineChart.getLegend().setEnabled(true);
+        lineChart.getDescription().setEnabled(true);
         lineChart.animateX(1500, Easing.EasingOption.EaseInSine);
         lineChart.setData(data); // Set the data to the line chart
         lineChart.invalidate(); // Refresh the line chart
     }
 
     private void retrieveDataAndPopulateCharts() {
-        myRef = database.getReference("Users/" + userName + "/Plants/" + "Ficus Elastica Robusta" + "/history");
+        myRef = database.getReference("Users/" + userName + "/Plants/" + plantName + "/history");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -123,9 +125,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
                     double temperature = snapshot.child("temperature").getValue(Double.class);
 
                     // Add the values to the corresponding array list
-                    humidityList.add(humidity);
                     soilMoistureList.add(soilMoisture);
-                    temperatureList.add(temperature);
 
                     populateLineChart(soilMoistureList);
                 }

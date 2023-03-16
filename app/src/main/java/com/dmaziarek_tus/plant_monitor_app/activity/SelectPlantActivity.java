@@ -21,8 +21,7 @@ public class SelectPlantActivity extends DrawerBaseActivity {
     ActivitySelectPlantBinding binding;
     String userName;
     ArrayList<String> plantNameList = new ArrayList<>();
-    CardView cardView1, cardview2, cardview3, cardView4;
-    TextView cardviewText1, cardviewText2, cardviewText3, cardviewText4;
+    TextView cardviewText1, cardviewText2, cardviewText3, cardviewText4, cardviewText5,cardviewText6,cardviewText7,cardviewText8,cardviewText9,cardviewText10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +30,16 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         setContentView(binding.getRoot());
         allocateActivityTitle("Select Plant");
 
-        cardView1 = (CardView) findViewById(R.id.card_view1);
-        cardview2 = (CardView) findViewById(R.id.card_view2);
-        cardview3 = (CardView) findViewById(R.id.card_view3);
-        cardView4 = (CardView) findViewById(R.id.card_view4);
         cardviewText1 = (TextView) findViewById(R.id.cardview_text1);
         cardviewText2 = (TextView) findViewById(R.id.cardview_text2);
         cardviewText3 = (TextView) findViewById(R.id.cardview_text3);
         cardviewText4 = (TextView) findViewById(R.id.cardview_text4);
+        cardviewText5 = (TextView) findViewById(R.id.cardview_text5);
+        cardviewText6 = (TextView) findViewById(R.id.cardview_text6);
+        cardviewText7 = (TextView) findViewById(R.id.cardview_text7);
+        cardviewText8 = (TextView) findViewById(R.id.cardview_text8);
+        cardviewText9 = (TextView) findViewById(R.id.cardview_text9);
+        cardviewText10 = (TextView) findViewById(R.id.cardview_text10);
 
         User user = new User();
         userName = user.getUserName().trim();
@@ -69,35 +70,39 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         }
     }
 
-    public void cardView1Clicked(View view) {
-        String plantName = cardviewText1.getText().toString();
-        Log.d("SelectPlantActivity", "cardView1Clicked - Plant name: " + plantName);
-        Intent intent = new Intent(this, PlantHealthActivity.class);
-        intent.putExtra("plantName", plantName);
-        startActivity(intent);
-    }
-
-    public void cardView2Clicked(View view) {
-        String plantName = cardviewText2.getText().toString();
-        Log.d("SelectPlantActivity", "cardView2Clicked - Plant name: " + plantName);
-        Intent intent = new Intent(this, PlantHealthActivity.class);
-        intent.putExtra("plantName", plantName);
-        startActivity(intent);
-    }
-
-    public void cardView3Clicked(View view) {
-        String plantName = cardviewText3.getText().toString();
-        Log.d("SelectPlantActivity", "cardView3Clicked - Plant name: " + plantName);
-        Intent intent = new Intent(this, PlantHealthActivity.class);
-        intent.putExtra("plantName", plantName);
-        startActivity(intent);
-    }
-
-    public void cardView4Clicked(View view) {
-        String plantName = cardviewText4.getText().toString();
-        Log.d("SelectPlantActivity", "cardView4Clicked - Plant name: " + plantName);
-        Intent intent = new Intent(this, PlantHealthActivity.class);
-        intent.putExtra("plantName", plantName);
-        startActivity(intent);
+    public void onPlantCardViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.card_view1:
+                PlantUtils.plantSelected(this, cardviewText1.getText().toString());
+                break;
+            case R.id.card_view2:
+                PlantUtils.plantSelected(this, cardviewText2.getText().toString());
+                break;
+            case R.id.card_view3:
+                PlantUtils.plantSelected(this, cardviewText3.getText().toString());
+                break;
+            case R.id.card_view4:
+                PlantUtils.plantSelected(this, cardviewText4.getText().toString());
+                break;
+            case R.id.card_view5:
+                PlantUtils.plantSelected(this, cardviewText5.getText().toString());
+                break;
+            case R.id.card_view6:
+                PlantUtils.plantSelected(this, cardviewText6.getText().toString());
+                break;
+            case R.id.card_view7:
+                PlantUtils.plantSelected(this, cardviewText7.getText().toString());
+                break;
+            case R.id.card_view8:
+                PlantUtils.plantSelected(this, cardviewText8.getText().toString());
+                break;
+            case R.id.card_view9:
+                PlantUtils.plantSelected(this, cardviewText9.getText().toString());
+                break;
+            case R.id.card_view10:
+                PlantUtils.plantSelected(this, cardviewText10.getText().toString());
+                break;
+        }
+        finish();
     }
 }
