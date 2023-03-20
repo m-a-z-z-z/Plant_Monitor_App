@@ -11,8 +11,10 @@ import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.dmaziarek_tus.plant_monitor_app.R;
+import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.google.android.material.navigation.NavigationView;
 
 public class DrawerBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,6 +33,10 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
 
         NavigationView navigationView = drawerLayout.findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
+        // Set the user's name in the navigation drawer
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView navUserName = headerLayout.findViewById(R.id.textView_userName);
+        navUserName.setText(UserUtils.getDisplayNameFromFirebase());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.menu_drawer_open, R.string.menu_drawer_close);
         drawerLayout.addDrawerListener(toggle);

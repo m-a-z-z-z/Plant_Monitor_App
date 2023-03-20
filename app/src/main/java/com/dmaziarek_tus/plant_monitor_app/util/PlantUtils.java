@@ -19,8 +19,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlantUtils {
+
     public static void noPlantsAdded(Context activityContext) {
         Toast.makeText(activityContext, "No plants added", Toast.LENGTH_SHORT).show();
         Log.d("PlantHealthActivity", "onCreate - No plants added");
@@ -64,7 +67,35 @@ public class PlantUtils {
                 Log.d("SignInActivity", "onCancelled - Error: " + error.getMessage());
             }
         });
-
     }
+
+//    public static void notifyWhenPlantsCritical() {
+//        Map<String, Integer> soilMoistureMap = new HashMap<>();
+//
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Plants");
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                // Iterate through all the plants
+//                for (DataSnapshot plantSnapshot : dataSnapshot.getChildren()) {
+//                    // Get the name of the plant
+//                    String plantName = plantSnapshot.child("plantName").getValue(String.class);
+//
+//                    // Get the soil moisture of the plant
+//                    int soilMoisture = plantSnapshot.child("soil_Moisture").getValue(Integer.class);
+//
+//                    // Map the soil moisture to the name of the plant
+//                    // You can use a Map<String, Integer> to store the data
+//                    soilMoistureMap.put(plantName, soilMoisture);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                // Handle errors here
+//            }
+//        });
+//
+//    }
 
 }

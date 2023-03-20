@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,7 +78,13 @@ public class PlantHealthActivity extends DrawerBaseActivity {
 
     }
 
-    public void readPlantHealthValues() {
+    public void onHistoricalDataButtonClick(View view) {
+        Intent intent = new Intent(this, HistoricalDataActivity.class);
+        intent.putExtra("plantName", plantName);
+        startActivity(intent);
+    }
+
+    private void readPlantHealthValues() {
         database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants/" + plantName);
         myRef.addValueEventListener(new ValueEventListener() {

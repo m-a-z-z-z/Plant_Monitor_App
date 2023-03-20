@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityDashboardBinding;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
+import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 
 public class DashboardActivity extends DrawerBaseActivity {
 

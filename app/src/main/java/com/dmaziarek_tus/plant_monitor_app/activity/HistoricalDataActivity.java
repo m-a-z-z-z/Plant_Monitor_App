@@ -64,28 +64,14 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
         }
         // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
         // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
-        else if (plantName == null || plantName.isEmpty() || plantName == "") {
+        else if (plantName == null || plantName.isEmpty() || plantName.equals("")) {
             Log.d("PlantHealthActivity", "Plant names: " + plantNameList);
             plantName = plantNameList.get(0);  // Get the first plant name from the array list
-             retrieveDataAndPopulateCharts();
+            retrieveDataAndPopulateCharts();
         }
         else {
              retrieveDataAndPopulateCharts();
         }
-
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-            try {
-                sleep(2500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                retrieveDataAndPopulateCharts();
-            }
-            }
-        };
-        thread.start();
     }
 
     private void populateLineChart(ArrayList<Integer> soilMoistureList) {
@@ -105,7 +91,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
         lineChart.getLegend().setEnabled(true);
-        lineChart.getDescription().setEnabled(true);
+        lineChart.getDescription().setEnabled(false);
         lineChart.animateX(1500, Easing.EasingOption.EaseInSine);
         lineChart.setData(data); // Set the data to the line chart
         lineChart.invalidate(); // Refresh the line chart

@@ -14,11 +14,15 @@
         android:gravity="center"
         android:text="Soil Moisture Over Time"
         android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cardView2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_margin="10dp"
@@ -27,8 +31,9 @@
         app:cardElevation="10dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHistoricalData"
-        tools:layout_editor_absoluteX="10dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHistoricalData">
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"

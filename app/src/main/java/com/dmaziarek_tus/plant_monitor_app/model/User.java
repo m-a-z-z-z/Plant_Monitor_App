@@ -2,6 +2,7 @@ package com.dmaziarek_tus.plant_monitor_app.model;
 
 import android.util.Log;
 
+import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -18,15 +19,7 @@ public class User {
     }
 
     public String getUserName() {
-        String fbDisplayName = null;
-
-        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (fbUser != null) {
-            fbDisplayName = fbUser.getDisplayName();
-            // do something with the user's information
-        }
-        this.userName = fbDisplayName;
-        return userName;
+        return this.userName = UserUtils.getDisplayNameFromFirebase();
     }
 
     public String getEmail() {
