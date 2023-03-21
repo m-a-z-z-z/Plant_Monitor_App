@@ -37,6 +37,7 @@ public class SplashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     if (mAuth.getCurrentUser() != null) {
+                        PlantUtils.notifyWhenPlantsCritical(SplashActivity.this);
                         PlantUtils.retrieveUserPlants();    // When user restarts app, plantNameList will null, so we need to retrieve the list again
                         Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
                         startActivity(intent);

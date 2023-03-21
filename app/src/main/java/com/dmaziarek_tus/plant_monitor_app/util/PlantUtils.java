@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.activity.AddPlantActivity;
@@ -81,7 +82,8 @@ public class PlantUtils {
         Map<String, Integer> soilMoistureMap = new HashMap<>();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Plants");
 
-        // notification channel stuff here
+        // notification stuff here
+        // Notification channel
         String channelID = "plant_notification_channel";
         String channelName = "Plant Notification Channel";
         String channelDescription = "Channel for plant notifications";
@@ -92,6 +94,12 @@ public class PlantUtils {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+        // Notification builder
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
+                .setSmallIcon(R.drawable.ic_water_drop)
+                .setContentTitle("Plant needs watering")
+                .setContentTitle("Your plant is dry and crusty dawg.")
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,9 +113,10 @@ public class PlantUtils {
                     // Map values to plant name
                     soilMoistureMap.put(plantName, soilMoisture);
 
-                    if (soilMoisture > 700) {
+                    if (soilMoisture >= 700) {
                         Log.d("PlantUtils", "onDataChange - " + plantName + " is critical");
-
+                        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                        notificationManagerCompat.notify();
                     }
                 }
             }

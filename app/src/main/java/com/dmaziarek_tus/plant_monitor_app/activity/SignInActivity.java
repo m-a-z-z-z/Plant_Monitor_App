@@ -69,7 +69,6 @@ public class SignInActivity extends AppCompatActivity {
 
         // Sign in user if checks are passed
         signInUser();
-        PlantUtils.notifyWhenPlantsCritical(this);
     }
 
     private void signInUser() {
