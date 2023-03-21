@@ -45,12 +45,41 @@
         android:id="@+id/button_AddPlant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Plant"
         android:onClick="onButtonAddPlantClicked"
+        android:text="Add Plant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_PlantName" />
+        app:layout_constraintTop_toBottomOf="@+id/galleryBtn" />
+
+    <ImageView
+        android:id="@+id/imageView_plantPhoto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_PlantType"
+        app:srcCompat="@drawable/ic_flower_alt" />
+
+    <Button
+        android:id="@+id/cameraBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take Photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_plantPhoto" />
+
+    <Button
+        android:id="@+id/galleryBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select from Gallery"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

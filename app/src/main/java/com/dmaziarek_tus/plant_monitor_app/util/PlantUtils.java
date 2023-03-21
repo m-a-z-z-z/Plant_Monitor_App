@@ -1,13 +1,19 @@
 package com.dmaziarek_tus.plant_monitor_app.util;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
+import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.activity.AddPlantActivity;
 import com.dmaziarek_tus.plant_monitor_app.activity.PlantHealthActivity;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityHistoricalDataBinding;
@@ -64,38 +70,53 @@ public class PlantUtils {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                User user = new User();
+                String userName = user.getUserName();
                 Log.d("SignInActivity", "onCancelled - Error: " + error.getMessage());
             }
         });
     }
 
-//    public static void notifyWhenPlantsCritical() {
-//        Map<String, Integer> soilMoistureMap = new HashMap<>();
-//
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Plants");
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                // Iterate through all the plants
-//                for (DataSnapshot plantSnapshot : dataSnapshot.getChildren()) {
-//                    // Get the name of the plant
-//                    String plantName = plantSnapshot.child("plantName").getValue(String.class);
-//
-//                    // Get the soil moisture of the plant
-//                    int soilMoisture = plantSnapshot.child("soil_Moisture").getValue(Integer.class);
-//
-//                    // Map the soil moisture to the name of the plant
-//                    // You can use a Map<String, Integer> to store the data
-//                    soilMoistureMap.put(plantName, soilMoisture);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                // Handle errors here
-//            }
-//        });
-//
-//    }
+    public static void notifyWhenPlantsCritical(Context context) {
+        Map<String, Integer> soilMoistureMap = new HashMap<>();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Plants");
 
+        // notification channel stuff here
+        String channelID = "plant_notification_channel";
+        String channelName = "Plant Notification Channel";
+        String channelDescription = "Channel for plant notifications";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, importance);
+            channel.setDescription(channelDescription);
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Iterate through all the plants
+                for (DataSnapshot plantSnapshot : dataSnapshot.getChildren()) {
+                    // Get the name of the plant
+                    String plantName = plantSnapshot.child("plantName").getValue(String.class);
+                    // Get the soil moisture of the plant
+                    int soilMoisture = plantSnapshot.child("soil_Moisture").getValue(Integer.class);
+                    // Map values to plant name
+                    soilMoistureMap.put(plantName, soilMoisture);
+
+                    if (soilMoisture > 700) {
+                        Log.d("PlantUtils", "onDataChange - " + plantName + " is critical");
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
+
+    }
 }
