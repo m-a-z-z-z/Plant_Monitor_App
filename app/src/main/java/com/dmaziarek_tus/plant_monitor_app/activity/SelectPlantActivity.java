@@ -28,9 +28,7 @@ public class SelectPlantActivity extends DrawerBaseActivity {
     String userName;
     ArrayList<String> plantNameList = new ArrayList<>();
     TextView cardviewText1, cardviewText2, cardviewText3, cardviewText4, cardviewText5,cardviewText6,cardviewText7,cardviewText8,cardviewText9,cardviewText10;
-    private FirebaseStorage mFirebaseStorage;
     private StorageReference mStorageReference;
-    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

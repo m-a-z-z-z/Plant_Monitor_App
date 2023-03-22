@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -58,6 +59,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
     Button button_AddPlant;
     Spinner spinner;
     ImageView imageView;
+    ProgressBar progressBar;
     String userName, plantName, selectedPlantType, filename;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap mImageBitmap;
@@ -74,6 +76,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
         spinner = (Spinner) findViewById(R.id.spinner_PlantType);
         button_AddPlant = (Button) findViewById(R.id.button_AddPlant);
         imageView = (ImageView) findViewById(R.id.imageView_plantPhoto);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         // Set spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.plant_types, android.R.layout.simple_spinner_item);
@@ -107,6 +110,10 @@ public class AddPlantActivity extends DrawerBaseActivity {
             Toast.makeText(AddPlantActivity.this, "Please enter a plant name", Toast.LENGTH_LONG).show();
             return;
         }
+
+        progressBar.setVisibility(View.VISIBLE);
+        button_AddPlant.setVisibility(View.GONE);
+
         checkForPlantsWithSameName(plantName, new PlantUtils.OnPlantExistsCallback() {
             @Override
             public void onPlantExists(boolean exists) {
@@ -145,6 +152,8 @@ public class AddPlantActivity extends DrawerBaseActivity {
                     } else {
                         Toast.makeText(AddPlantActivity.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
                         Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant not added to database");
+                        progressBar.setVisibility(View.GONE);
+                        button_AddPlant.setVisibility(View.VISIBLE);
                     }
                 }
             );
