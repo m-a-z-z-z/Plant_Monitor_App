@@ -1,5 +1,7 @@
 package com.dmaziarek_tus.plant_monitor_app.activity;
 
+import static com.dmaziarek_tus.plant_monitor_app.util.PlantUtils.checkForPlantsWithSameName;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -32,6 +34,7 @@ import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityAddPlantBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -99,26 +102,52 @@ public class AddPlantActivity extends DrawerBaseActivity {
     // Add plant to database
     public void onButtonAddPlantClicked(View view) {
         plantName = editText_PlantName.getText().toString().trim();
-        PlantNamesSingleton.getInstance().addPlantName(plantName);
-        filename = plantName + "_" + UUID.randomUUID().toString();
-        Plant plant = new Plant(plantName, selectedPlantType, filename);
 
-        Log.d("AddPlantActivity", "onButtonAddPlantClicked: " + plantName + " " + selectedPlantType);
+        if(plantName.isEmpty()) {
+            Toast.makeText(AddPlantActivity.this, "Please enter a plant name", Toast.LENGTH_LONG).show();
+            return;
+        }
+        checkForPlantsWithSameName(plantName, new PlantUtils.OnPlantExistsCallback() {
+            @Override
+            public void onPlantExists(boolean exists) {
+                if(exists) {
+                    Toast.makeText(AddPlantActivity.this, "Plant with that name already exists", Toast.LENGTH_LONG).show();
+                    int randomNum = (int) (Math.random() * 1000);
+                    plantName += "_" + randomNum;
+                    Log.d("AddPlantActivity", "onButtonAddPlantClicked, onPlantExists - Plant name: " + plantName);
+                    addPlantToDB(view);
+                }
+                else {
+                    Toast.makeText(AddPlantActivity.this, "Plant name is unique", Toast.LENGTH_LONG).show();
+                    addPlantToDB(view);
+                }
+            }
+        });
+    }
+
+    public void addPlantToDB(View view) {
+        Log.d("AddPlantActivity", "onButtonAddPlantClicked, onPlantExists, addPlantToDB - Plant name: " + plantName);
+        PlantNamesSingleton.getInstance().addPlantName(plantName);
+        filename = plantName + "_" + userName;
+        Log.d("AddPlantActivity", "onButtonAddPlantClicked - Filename: " + filename);
+        Plant plant = new Plant(plantName, selectedPlantType, filename);
 
         FirebaseDatabase.getInstance().getReference("Users")
             .child(userName).child("Plants").child(plantName).setValue(plant)
             .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    uploadPhoto(view, filename);
-                    Toast.makeText(AddPlantActivity.this, "Plant added successfully", Toast.LENGTH_LONG).show();
-                    Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant added to database");
-                    editText_PlantName.setEnabled(false);
-                } else {
-                    Toast.makeText(AddPlantActivity.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
-                    Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant not added to database");
+                    if (task.isSuccessful()) {
+                        uploadPhoto(view, filename);
+                        Toast.makeText(AddPlantActivity.this, "Plant added successfully", Toast.LENGTH_LONG).show();
+                        Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant added to database");
+                        Intent intent = new Intent(AddPlantActivity.this, PlantHealthActivity.class);
+                        intent.putExtra("plantName", plantName);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(AddPlantActivity.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
+                        Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant not added to database");
+                    }
                 }
-            }
-        );
+            );
     }
 
     public void onButtonTakePhotoClick(View view) {

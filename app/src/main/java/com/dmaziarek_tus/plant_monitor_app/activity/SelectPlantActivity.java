@@ -86,7 +86,7 @@ public class SelectPlantActivity extends DrawerBaseActivity {
                 ImageView imageView = (ImageView) findViewById(resID3);
                 Glide.get(this).getRegistry().append(StorageReference.class, InputStream.class, new FirebaseImageLoader.Factory());
                 Glide.with(this)
-                        .load(mStorageReference)
+                        .load(mStorageReference + plantNameList.get(i-1) + "_" + userName + ".jpg")
                         .into(imageView);
             }
         }

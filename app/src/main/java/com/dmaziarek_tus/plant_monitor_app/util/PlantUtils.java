@@ -81,13 +81,30 @@ public class PlantUtils {
         });
     }
 
-    public static void retrievePlantPhoto() {
+    public static void checkForPlantsWithSameName(String plantName, OnPlantExistsCallback callback) {
         User user = new User();
         String userName = user.getUserName();
-        Log.d("SignInActivity", "retrieveUserPlants - display name: " + userName);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants");
-        ArrayList<String> plantNameList = new ArrayList<>();
+        DatabaseReference plantsRef = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants");
+        plantsRef.child(plantName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean exists = snapshot.exists();
+                if (exists) {
+                    Log.d("PlantUtils", "onDataChange - Plant name already exists");
+                }
+                callback.onPlantExists(exists);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("PlantUtils", "onCancelled - Error: " + error.getMessage());
+                callback.onPlantExists(false);
+            }
+        });
+    }
+
+    public interface OnPlantExistsCallback {
+        void onPlantExists(boolean exists);
     }
 
     public static void notifyWhenPlantsCritical(Context context) {
