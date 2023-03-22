@@ -33,7 +33,7 @@
                     android:layout_gravity="top|center_horizontal"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/flower_bee"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="fitCenter"/>
 
                 <TextView
                     android:id="@+id/cardview_text1"

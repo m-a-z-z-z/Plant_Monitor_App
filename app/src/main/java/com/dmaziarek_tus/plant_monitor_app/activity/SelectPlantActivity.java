@@ -6,15 +6,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivitySelectPlantBinding;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class SelectPlantActivity extends DrawerBaseActivity {
@@ -22,6 +28,9 @@ public class SelectPlantActivity extends DrawerBaseActivity {
     String userName;
     ArrayList<String> plantNameList = new ArrayList<>();
     TextView cardviewText1, cardviewText2, cardviewText3, cardviewText4, cardviewText5,cardviewText6,cardviewText7,cardviewText8,cardviewText9,cardviewText10;
+    private FirebaseStorage mFirebaseStorage;
+    private StorageReference mStorageReference;
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,10 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         setContentView(binding.getRoot());
         allocateActivityTitle("Select Plant");
 
+        // Get Firebase storage for plant photos
+        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/");
+
+        // Support up to 10 cards/plants. Haven't found a way to do this dynamically yet
         cardviewText1 = (TextView) findViewById(R.id.cardview_text1);
         cardviewText2 = (TextView) findViewById(R.id.cardview_text2);
         cardviewText3 = (TextView) findViewById(R.id.cardview_text3);
@@ -59,13 +72,22 @@ public class SelectPlantActivity extends DrawerBaseActivity {
             for (int i = 1; i < plantNameList.size()+1; i++) {
                 String cardviewName = "card_view" + i;
                 String textviewName = "cardview_text" + i;
+                String imageviewName = "img_plant" + i;
                 int resID = getResources().getIdentifier(cardviewName, "id", getPackageName());
                 int resID2 = getResources().getIdentifier(textviewName, "id", getPackageName());
+                int resID3 = getResources().getIdentifier(imageviewName, "id", getPackageName());
 
                 CardView cardView = (CardView) findViewById(resID);
                 cardView.setVisibility(View.VISIBLE);
+
                 TextView textView = (TextView) findViewById(resID2);
                 textView.setText(plantNameList.get(i-1));
+
+                ImageView imageView = (ImageView) findViewById(resID3);
+                Glide.get(this).getRegistry().append(StorageReference.class, InputStream.class, new FirebaseImageLoader.Factory());
+                Glide.with(this)
+                        .load(mStorageReference)
+                        .into(imageView);
             }
         }
     }

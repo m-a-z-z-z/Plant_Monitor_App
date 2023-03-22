@@ -104,20 +104,21 @@ public class SignUpActivity extends AppCompatActivity {
 
                     // Add user to Firebase Realtime Database
                     FirebaseDatabase.getInstance().getReference("Users")
-                            .child(userName).setValue(user)// User will be saved under path "Users": {"**Username**"} in realtime database
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(SignUpActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
-                                        progressBar.setVisibility(View.GONE);
-                                    } else {
-                                        Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();
-                                        progressBar.setVisibility(View.GONE);
-                                        button_SignUp.setVisibility(View.VISIBLE);
-                                    }
+                        .child(userName).setValue(user)// User will be saved under path "Users": {"**Username**"} in realtime database
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(SignUpActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
+                                    progressBar.setVisibility(View.GONE);
+                                } else {
+                                    Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();
+                                    progressBar.setVisibility(View.GONE);
+                                    button_SignUp.setVisibility(View.VISIBLE);
                                 }
-                            });
+                            }
+                        }
+                    );
                 }
                 else {
                     Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();

@@ -81,6 +81,15 @@ public class PlantUtils {
         });
     }
 
+    public static void retrievePlantPhoto() {
+        User user = new User();
+        String userName = user.getUserName();
+        Log.d("SignInActivity", "retrieveUserPlants - display name: " + userName);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants");
+        ArrayList<String> plantNameList = new ArrayList<>();
+    }
+
     public static void notifyWhenPlantsCritical(Context context) {
         Map<String, Integer> soilMoistureMap = new HashMap<>();
         User user = new User();

@@ -1,9 +1,11 @@
 package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,23 +38,26 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 public class AddPlantActivity extends DrawerBaseActivity {
     ActivityAddPlantBinding binding;
     EditText editText_PlantName;
     Button button_AddPlant;
     Spinner spinner;
-    FirebaseAuth mAuth;
-    FirebaseDatabase database;
-    DatabaseReference dbRef;
-    String userName, plantName, selectedPlantType;
+    ImageView imageView;
+    String userName, plantName, selectedPlantType, filename;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Bitmap mImageBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +70,12 @@ public class AddPlantActivity extends DrawerBaseActivity {
         editText_PlantName = (EditText) findViewById(R.id.editText_PlantName);
         spinner = (Spinner) findViewById(R.id.spinner_PlantType);
         button_AddPlant = (Button) findViewById(R.id.button_AddPlant);
+        imageView = (ImageView) findViewById(R.id.imageView_plantPhoto);
 
         // Set spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.plant_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
         // Respond to spinner selection
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -85,10 +90,6 @@ public class AddPlantActivity extends DrawerBaseActivity {
 
             }
         });
-        // Get Firebase instances for sending data
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        dbRef = database.getReference("Users");
 
         // Get user to add plant under
         User user = new User();
@@ -99,12 +100,16 @@ public class AddPlantActivity extends DrawerBaseActivity {
     public void onButtonAddPlantClicked(View view) {
         plantName = editText_PlantName.getText().toString().trim();
         PlantNamesSingleton.getInstance().addPlantName(plantName);
-        Plant plant = new Plant(plantName, selectedPlantType);
+        filename = plantName + "_" + UUID.randomUUID().toString();
+        Plant plant = new Plant(plantName, selectedPlantType, filename);
+
         Log.d("AddPlantActivity", "onButtonAddPlantClicked: " + plantName + " " + selectedPlantType);
 
-        dbRef.child(userName).child("Plants").child(plantName).setValue(plant)
+        FirebaseDatabase.getInstance().getReference("Users")
+            .child(userName).child("Plants").child(plantName).setValue(plant)
             .addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
+                    uploadPhoto(view, filename);
                     Toast.makeText(AddPlantActivity.this, "Plant added successfully", Toast.LENGTH_LONG).show();
                     Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant added to database");
                     editText_PlantName.setEnabled(false);
@@ -114,6 +119,45 @@ public class AddPlantActivity extends DrawerBaseActivity {
                 }
             }
         );
+    }
+
+    public void onButtonTakePhotoClick(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            mImageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(mImageBitmap);
+        }
+    }
+
+    protected void uploadPhoto(View view, String photoName) {
+        if (mImageBitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            StorageReference imagesRef = FirebaseStorage.getInstance().getReference().child("images/" + photoName + ".jpg");
+
+            UploadTask uploadTask = imagesRef.putBytes(data);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Image uploaded successfully
+                    Log.d("AddPlantActivity", "onSuccess: Image uploaded successfully");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Image upload failed
+                    Log.d("AddPlantActivity", "onFailure: Image upload failed.\n " + e.getMessage());
+                }
+            });
+        }
     }
 
 }

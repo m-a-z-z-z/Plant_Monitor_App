@@ -9,14 +9,16 @@ public class Plant {
     double humidity;
     double temperature;
     String plantType;
+    String photoUrl;
 
     public Plant() {
 
     }
 
-    public Plant(String plantName, String plantType) {
+    public Plant(String plantName, String plantType, String photoUrl) {
         this.plantName = plantName;
         this.plantType = plantType;
+        this.photoUrl = photoUrl;
         this.soil_Moisture = 0;
         this.irLight = 0;
         this.uvLight = 0;
@@ -88,4 +90,8 @@ public class Plant {
     public void setPlantType(String plantType) {
         this.plantType = plantType;
     }
+
+    public String getPhotoUrl() { return photoUrl; }
+
+    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
 }
