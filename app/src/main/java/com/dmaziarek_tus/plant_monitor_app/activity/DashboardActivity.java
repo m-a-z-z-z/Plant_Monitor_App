@@ -22,8 +22,6 @@ public class DashboardActivity extends DrawerBaseActivity {
         setContentView(binding.getRoot());
         allocateActivityTitle("Dashboard");
 
-        PlantUtils.notifyWhenPlantsCritical(this);
-
     }
 
     public void onDashboardCVClick(View view) {
