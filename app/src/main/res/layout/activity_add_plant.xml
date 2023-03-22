@@ -71,7 +71,6 @@
         android:onClick="onButtonTakePhotoClick"
         android:text="Take Photo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_plantPhoto" />
 
