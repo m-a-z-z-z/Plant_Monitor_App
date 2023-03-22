@@ -39,9 +39,6 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         setContentView(binding.getRoot());
         allocateActivityTitle("Select Plant");
 
-        // Get Firebase storage for plant photos
-        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/");
-
         // Support up to 10 cards/plants. Haven't found a way to do this dynamically yet
         cardviewText1 = (TextView) findViewById(R.id.cardview_text1);
         cardviewText2 = (TextView) findViewById(R.id.cardview_text2);
@@ -77,16 +74,23 @@ public class SelectPlantActivity extends DrawerBaseActivity {
                 int resID2 = getResources().getIdentifier(textviewName, "id", getPackageName());
                 int resID3 = getResources().getIdentifier(imageviewName, "id", getPackageName());
 
+                // Set the card to visible
                 CardView cardView = (CardView) findViewById(resID);
                 cardView.setVisibility(View.VISIBLE);
 
+                // Set the text for each card
                 TextView textView = (TextView) findViewById(resID2);
                 textView.setText(plantNameList.get(i-1));
 
+                // Set the image for each card
+                // Get Firebase storage for plant photos
+                String photoFileName = plantNameList.get(i-1) + "_" + userName + ".jpg";
+                Log.d("SelectPlantActivity", "onCreate - Photo file name: " + photoFileName);
+                mStorageReference = FirebaseStorage.getInstance().getReference().child("images/" + photoFileName);
                 ImageView imageView = (ImageView) findViewById(resID3);
                 Glide.get(this).getRegistry().append(StorageReference.class, InputStream.class, new FirebaseImageLoader.Factory());
                 Glide.with(this)
-                        .load(mStorageReference + plantNameList.get(i-1) + "_" + userName + ".jpg")
+                        .load(mStorageReference)
                         .into(imageView);
             }
         }
