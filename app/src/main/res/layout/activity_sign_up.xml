@@ -91,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/button_sign_up"
+        android:background="@drawable/primary_button"
         android:onClick="onButtonSignUpClicked"
         android:text="Sign Up!"
         app:layout_constraintEnd_toEndOf="parent"

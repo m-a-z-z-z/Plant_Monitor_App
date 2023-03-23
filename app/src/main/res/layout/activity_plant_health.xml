@@ -140,6 +140,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_readableTemp"
-        android:onClick="onHistoricalDataButtonClick"/>
+        android:onClick="onHistoricalDataButtonClick"
+        android:background="@drawable/primary_button"
+        android:textColor="@color/black"
+        app:backgroundTint="@null" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
