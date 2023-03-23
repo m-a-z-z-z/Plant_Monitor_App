@@ -1,5 +1,8 @@
 package com.dmaziarek_tus.plant_monitor_app.activity;
 
+import static com.dmaziarek_tus.plant_monitor_app.util.UserUtils.checkForUsersWithSameEmail;
+import static com.dmaziarek_tus.plant_monitor_app.util.UserUtils.checkForUsersWithSameUsername;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
+import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,7 +36,6 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressBar progressBar;
     Button button_SignUp;
     private FirebaseAuth mAuth;
-    DataSnapshot snapshot;
     String userName, email, password, confirmPassword;
 
     @Override
@@ -65,6 +68,18 @@ public class SignUpActivity extends AppCompatActivity {
             editText_Email.requestFocus();
             return;
         }
+        if (!email.isEmpty()){
+            checkForUsersWithSameEmail(email, new UserUtils.OnEmailTakenCallback() {
+                @Override
+                public void onEmailTaken(boolean isTaken) {
+                    if (isTaken) {
+                        editText_Email.setError("Email is already in use");
+                        editText_Email.requestFocus();
+                        return;
+                    }
+                }
+            });
+        }
         if (password.isEmpty() || password.length() < 6) {
             editText_Password.setError("Password is required");
             editText_Password.requestFocus();
@@ -80,17 +95,27 @@ public class SignUpActivity extends AppCompatActivity {
             editText_ConfirmPassword.requestFocus();
             return;
         }
+        if(!userName.isEmpty()) {
+            checkForUsersWithSameUsername(userName, new UserUtils.OnUsernameTakenCallback() {
+                @Override
+                public void onUsernameTaken(boolean isTaken) {
+                    if (isTaken) {
+                        editText_UserName.setError("Username is already taken");
+                        editText_UserName.requestFocus();
+                        return;
+                    }
+                    else {
+                        progressBar.setVisibility(View.VISIBLE);
+                        button_SignUp.setVisibility(View.GONE);
 
-        button_SignUp.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+                        // If checks pass, register user
+                        registerUser();
+                    }
+                }
+            });
+        }
 
-        // If checks pass, register user
-        registerUser();
 
-        // Redirect to sign in activity
-        loadSignInActivity(view);
-
-        finish();   // Close sign up activity
     }
 
     private void registerUser() {
@@ -98,9 +123,9 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    User user = new User(userName, email);
+                    User user = new User(email, userName);
                     FirebaseUser fbUser = mAuth.getCurrentUser();
-                    setDisplayName(fbUser, userName);
+                    UserUtils.setDisplayNameForFirebase(fbUser, userName);
 
                     // Add user to Firebase Realtime Database
                     FirebaseDatabase.getInstance().getReference("Users")
@@ -111,6 +136,10 @@ public class SignUpActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(SignUpActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
                                     progressBar.setVisibility(View.GONE);
+                                    // Redirect to sign in activity
+                                    Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                    startActivity(intent);
+                                    finish();   // Close sign up activity
                                 } else {
                                     Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();
                                     progressBar.setVisibility(View.GONE);
@@ -123,48 +152,10 @@ public class SignUpActivity extends AppCompatActivity {
                 else {
                     Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
+                    button_SignUp.setVisibility(View.VISIBLE);
                 }
             }
         });
-    }
-
-    private void setDisplayName(FirebaseUser firebaseUser, String userName) {
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-            .setDisplayName(userName)
-            .build();
-
-        firebaseUser.updateProfile(profileUpdates)
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Log.d("SignUpActivity", "User profile updated.");
-                    }
-                }
-            });
-    }
-
-    private boolean checkUserNameExistsInFirebase(String userName) {
-        Log.d("TAG", "checkUserNameExistsInFirebase: Checking if " + userName + " exists in Firebase Realtime Database...");
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child("userName");
-        Query query = databaseRef.orderByChild("userName").equalTo(userName);
-
-        final boolean[] exists = new boolean[1];
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                exists[0] = snapshot.exists();
-                Log.d("TAG", "onDataChange: User exists: " + exists[0]);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                exists[0] = false;
-                Log.d("TAG", "onCancelled: User exists: " + exists[0]);
-            }
-        });
-
-        return exists[0];
     }
 
     public void loadSignInActivity(View view) {

@@ -15,6 +15,7 @@ import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityPlantHealthBindin
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
+import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,8 +50,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         textView_readableTemp = (TextView) findViewById(R.id.textView_readableTemp);
         textView_plantName = (TextView) findViewById(R.id.textView_plantName);
 
-        User user = new User();
-        userName = user.getUserName();
+        userName = UserUtils.getDisplayNameFromFirebase();
 
         // Get plant name from previous activity
         Intent intent = getIntent();

@@ -8,19 +8,18 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class User {
     private String userName;
+    private String displayName;
     private String email;
     private String password;
 
     public User() { } // empty constructor
 
-    public User(String userName, String email) {
-        this.userName = userName;
-        this.email = email;
+    public User(String _email, String _userName) {
+        this.email = _email;
+        this.userName = _userName;
     }
 
-    public String getUserName() {
-        return this.userName = UserUtils.getDisplayNameFromFirebase();
-    }
+    public String getUserName() { return userName; }
 
     public String getEmail() {
         return email;
@@ -30,4 +29,11 @@ public class User {
         return password;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 }

@@ -49,8 +49,7 @@ public class PlantUtils {
 
     public static void retrieveUserPlants() {
         // Get username to use for reference in database to retrieve users plants
-        User user = new User();
-        String userName = user.getUserName();
+        String userName = UserUtils.getDisplayNameFromFirebase();
         Log.d("SignInActivity", "retrieveUserPlants - display name: " + userName);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants");
@@ -74,16 +73,13 @@ public class PlantUtils {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                User user = new User();
-                String userName = user.getUserName();
                 Log.d("SignInActivity", "onCancelled - Error: " + error.getMessage());
             }
         });
     }
 
     public static void checkForPlantsWithSameName(String plantName, OnPlantExistsCallback callback) {
-        User user = new User();
-        String userName = user.getUserName();
+        String userName = UserUtils.getDisplayNameFromFirebase();
         DatabaseReference plantsRef = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants");
         plantsRef.child(plantName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -109,8 +105,7 @@ public class PlantUtils {
 
     public static void notifyWhenPlantsCritical(Context context) {
         Map<String, Integer> soilMoistureMap = new HashMap<>();
-        User user = new User();
-        String userName = user.getUserName();
+        String userName = UserUtils.getDisplayNameFromFirebase();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants");
 
         // notification stuff here

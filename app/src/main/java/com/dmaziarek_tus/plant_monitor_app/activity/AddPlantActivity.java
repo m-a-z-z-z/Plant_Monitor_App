@@ -36,6 +36,7 @@ import com.dmaziarek_tus.plant_monitor_app.model.Plant;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
+import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -98,8 +99,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
         });
 
         // Get user to add plant under
-        User user = new User();
-        userName = user.getUserName().trim();
+        userName = UserUtils.getDisplayNameFromFirebase();
     }
 
     // Add plant to database

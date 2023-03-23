@@ -16,6 +16,7 @@ import com.dmaziarek_tus.plant_monitor_app.databinding.ActivitySelectPlantBindin
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
+import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -49,8 +50,7 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         cardviewText9 = (TextView) findViewById(R.id.cardview_text9);
         cardviewText10 = (TextView) findViewById(R.id.cardview_text10);
 
-        User user = new User();
-        userName = user.getUserName().trim();
+        userName = UserUtils.getDisplayNameFromFirebase();
 
         // Set the array list from the singleton
         plantNameList = PlantNamesSingleton.getInstance().getPlantNames();

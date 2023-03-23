@@ -13,6 +13,7 @@ import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityHistoricalDataBin
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
+import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -50,7 +51,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
 
         lineChart = findViewById(R.id.lineChart);   // Get the line chart from the layout
 
-        userName = new User().getUserName();
+        userName = UserUtils.getDisplayNameFromFirebase();
 
         Intent intent = getIntent();
         plantName = intent.getStringExtra("plantName");
