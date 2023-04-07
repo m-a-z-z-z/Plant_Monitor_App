@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,8 +64,8 @@ public class SignUpActivity extends AppCompatActivity {
             editText_UserName.requestFocus();
             return;
         }
-        if (email.isEmpty()) {
-            editText_Email.setError("Email is required");
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            editText_Email.setError("Please enter a valid email");
             editText_Email.requestFocus();
             return;
         }
@@ -80,13 +81,18 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
         }
-        if (password.isEmpty() || password.length() < 6) {
+        if (password.isEmpty()) {
             editText_Password.setError("Password is required");
             editText_Password.requestFocus();
             return;
         }
+        if (password.length() < 6) {
+            editText_Password.setError("Password must be at least 6 characters");
+            editText_Password.requestFocus();
+            return;
+        }
         if (confirmPassword.isEmpty() || confirmPassword.length() < 6) {
-            editText_ConfirmPassword.setError("Confirm password is required");
+            editText_ConfirmPassword.setError("Passwords do not match");
             editText_ConfirmPassword.requestFocus();
             return;
         }

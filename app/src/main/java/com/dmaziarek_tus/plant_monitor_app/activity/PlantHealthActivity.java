@@ -99,7 +99,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
 
                 // Checks for soil moisture
                 if (soilMoistureVal <= 550) {
-                    readableMoistureVal = " - In water";
+                    readableMoistureVal = " - Soil is too wet";
                 } else if (soilMoistureVal >= 551 && soilMoistureVal <= 650) {
                     readableMoistureVal = " - Moist";
                 } else if (soilMoistureVal >= 651 && soilMoistureVal <= 700) {

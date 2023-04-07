@@ -30,7 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class SignInActivity extends AppCompatActivity {
-
     EditText editText_emailSignIn, editText_passwordSignIn;
     ProgressBar progressBar;
     Button button_SignIn;

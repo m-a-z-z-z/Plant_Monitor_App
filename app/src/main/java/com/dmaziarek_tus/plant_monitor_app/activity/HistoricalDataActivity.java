@@ -1,8 +1,5 @@
 package com.dmaziarek_tus.plant_monitor_app.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
@@ -11,7 +8,6 @@ import android.util.Log;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityHistoricalDataBinding;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
-import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.github.mikephil.charting.animation.Easing;

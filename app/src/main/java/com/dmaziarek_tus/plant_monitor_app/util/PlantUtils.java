@@ -73,7 +73,7 @@ public class PlantUtils {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("SignInActivity", "onCancelled - Error: " + error.getMessage());
+                Log.d("PlantUtils", "onCancelled - Error: " + error.getMessage());
             }
         });
     }

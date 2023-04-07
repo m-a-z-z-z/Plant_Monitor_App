@@ -107,7 +107,8 @@ public class AddPlantActivity extends DrawerBaseActivity {
         plantName = editText_PlantName.getText().toString().trim();
 
         if(plantName.isEmpty()) {
-            Toast.makeText(AddPlantActivity.this, "Please enter a plant name", Toast.LENGTH_LONG).show();
+            editText_PlantName.setError("Plant name is required");
+            editText_PlantName.requestFocus();
             return;
         }
 

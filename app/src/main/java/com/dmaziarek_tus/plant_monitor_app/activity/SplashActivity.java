@@ -3,6 +3,7 @@ package com.dmaziarek_tus.plant_monitor_app.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -37,12 +38,14 @@ public class SplashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     if (mAuth.getCurrentUser() != null) {
+                        Log.d("SplashActivity", "User is signed in");
                         PlantUtils.notifyWhenPlantsCritical(SplashActivity.this);
                         PlantUtils.retrieveUserPlants();    // When user restarts app, plantNameList will null, so we need to retrieve the list again
                         Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
                         startActivity(intent);
                         finish();   // finish() is used to destroy the activity, will stop the user navigating back to the splash screen
                     } else {
+                        Log.d("SplashActivity", "User is not signed in");
                         Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
                         startActivity(intent);
                         finish();   // finish() is used to destroy the activity, will stop the user navigating back to the splash screen
