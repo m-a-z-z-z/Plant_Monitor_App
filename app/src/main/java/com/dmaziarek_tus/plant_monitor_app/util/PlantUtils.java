@@ -44,9 +44,9 @@ public class PlantUtils {
         activityContext.startActivity(intent);
     }
 
-    public static void plantSelected(Context activityContext, String plantName) {
+    public static void plantSelected(Context activityContext, String plantID) {
         Intent intent = new Intent(activityContext, PlantHealthActivity.class);
-        intent.putExtra("plantName", plantName);
+        intent.putExtra("plantID", plantID);
         activityContext.startActivity(intent);
     }
 
@@ -88,22 +88,18 @@ public class PlantUtils {
         });
     }
 
-    public static void updatePlantPhotoNames(String oldPlantName, String newPlantName) {
-        // Get photo from firebase storage to update
+    public static void updatePlantNameInDB(String plantID, String newPlantName, String plantType) {
         String userName = UserUtils.getDisplayNameFromFirebase();
-        String photoFileName = oldPlantName + "_" + userName + ".jpg";
-        StorageReference imagesRef = FirebaseStorage.getInstance().getReference().child("images/" + photoFileName + ".jpg");
-
-        String newPhotoFileName = newPlantName + "_" + userName + ".jpg";
-        imagesRef.child("images/" +  newPhotoFileName + ".jpg").putFile(imagesRef.getDownloadUrl().getResult());
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants/" + plantID);
+        databaseReference1.child("plantName").setValue(newPlantName);
+        databaseReference1.child("plantType").setValue(plantType);
 
     }
 
-    public static void updatePlantNameInDB(String oldPlantName, String newPlantName) {
+    public static void deletePlantFromDB(String plantID) {
         String userName = UserUtils.getDisplayNameFromFirebase();
-        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants/" + oldPlantName);
-        databaseReference1.child("plantName").setValue(newPlantName);
-
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants/" + plantID);
+        databaseReference1.removeValue();
     }
 
     public static void checkForPlantsWithSameName(String plantName, OnPlantExistsCallback callback) {
@@ -158,6 +154,7 @@ public class PlantUtils {
                 for (DataSnapshot plantSnapshot : dataSnapshot.getChildren()) {
                     // Get the name of the plant
                     plantName = plantSnapshot.child("plantName").getValue(String.class);
+                    Log.d("PlantUtils", "onDataChange - plant name: " + plantName);
                     // Get the soil moisture of the plant
                     soilMoisture = plantSnapshot.child("soil_Moisture").getValue(Integer.class);
 

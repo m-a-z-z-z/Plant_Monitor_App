@@ -41,13 +41,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom|center_horizontal"
-                    android:text=""
+                    android:text="Roses"
                     android:paddingTop="10dp"
                     android:textColor="@color/white"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -83,6 +90,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -118,6 +132,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -153,6 +174,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -188,6 +216,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view6"
@@ -222,6 +257,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view7"
@@ -256,6 +298,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view8"
@@ -290,6 +339,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view9"
@@ -324,6 +380,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view10"
@@ -358,6 +421,13 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:background="@drawable/shadow"/>
+
+                <TextView
+                    android:id="@+id/cardview_idText10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="invisible"/>
             </androidx.cardview.widget.CardView>
 
 

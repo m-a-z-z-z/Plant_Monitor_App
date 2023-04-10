@@ -26,6 +26,14 @@ public class PlantNamesSingleton {
 
     public void setPlantList(ArrayList<Plant> plantList) { this.plantList = plantList; }
 
+    public void removePlant(String plantID) {
+        for (int i = 0; i < plantList.size(); i++) {
+            if (plantList.get(i).getPlantID().equals(plantID)) {
+                plantList.remove(i);
+            }
+        }
+    }
+
 //    // Used when the user needs to retrieve all the plants they have added
 //    public ArrayList<String> getPlantNames() {
 //        return plantNameList;

@@ -9,8 +9,11 @@ import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,18 +92,54 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         startActivity(intent);
     }
 
-    public void promptChangePlantName(View view) {
+    public void promptDeletePlant(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Change Plant Name");
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
+        builder.setTitle("Delete Plant");
+        builder.setMessage("Are you sure you want to delete this plant?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlantUtils.deletePlantFromDB(plantID);
+                PlantNamesSingleton.getInstance().removePlant(plantID);
+                Log.d("PlantHealthActivity", "Plant names: " + plantList);
+                Toast.makeText(PlantHealthActivity.this, "Plant deleted", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PlantHealthActivity.this, SelectPlantActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
+    public void promptChangePlantName(View view) {
+        // inflate the custom dialog layout
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_edit_plant, null);
+
+        // Get references to the UI elements in dialog
+        Spinner spinnerPlantType = dialogView.findViewById(R.id.spinner_PlantType);
+        EditText editTextPlantName = dialogView.findViewById(R.id.editText_PlantName);
+
+        // Set spinner
+        // Set spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.plant_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPlantType.setAdapter(adapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.setTitle("Change Plant Attributes");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String newPlantName = input.getText().toString();
-                PlantUtils.updatePlantNameInDB(plantName, newPlantName);
-                PlantUtils.updatePlantPhotoNames(plantName, newPlantName);
+                String newPlantName = editTextPlantName.getText().toString();
+                String newPlantType = spinnerPlantType.getSelectedItem().toString();
+                PlantUtils.updatePlantNameInDB(plantID, newPlantName, newPlantType);
                 textView_plantName.setText(newPlantName);
             }
         });
