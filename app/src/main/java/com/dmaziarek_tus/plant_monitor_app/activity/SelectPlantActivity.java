@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivitySelectPlantBinding;
+import com.dmaziarek_tus.plant_monitor_app.model.Plant;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 public class SelectPlantActivity extends DrawerBaseActivity {
     ActivitySelectPlantBinding binding;
     String userName;
-    ArrayList<String> plantNameList = new ArrayList<>();
+    ArrayList<Plant> plantList = new ArrayList<>();
     TextView cardviewText1, cardviewText2, cardviewText3, cardviewText4, cardviewText5,cardviewText6,cardviewText7,cardviewText8,cardviewText9,cardviewText10;
     private StorageReference mStorageReference;
 
@@ -53,18 +54,18 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         userName = UserUtils.getDisplayNameFromFirebase();
 
         // Set the array list from the singleton
-        plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
-        Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
+        plantList = PlantNamesSingleton.getInstance().getPlantList();
+        Log.d("SelectPlantActivity", "onCreate - Plants: " + plantList);
 
         // I know this looks dumb but the app would crash every time if plantNameList == Null || plantNameList.isEmpty() was in one if statement
-        if (plantNameList == null) {    // This should never be null after adding PlantUtils.retrievePlantNames() to splash screen, but just in case
+        if (plantList == null) {    // This should never be null after adding PlantUtils.retrievePlantNames() to splash screen, but just in case
             PlantUtils.noPlantsAdded(this);
             Log.d("SelectPlantActivity", "onCreate - No plants added, launching add plant activity");
-        } else if (plantNameList.isEmpty()) {
+        } else if (plantList.isEmpty()) {
             PlantUtils.noPlantsAdded(this);
             Log.d("SelectPlantActivity", "onCreate - No plants added, launching add plant activity");
         } else {
-            for (int i = 1; i < plantNameList.size()+1; i++) {
+            for (int i = 1; i < plantList.size()+1; i++) {
                 String cardviewName = "card_view" + i;
                 String textviewName = "cardview_text" + i;
                 String imageviewName = "img_plant" + i;
@@ -78,11 +79,11 @@ public class SelectPlantActivity extends DrawerBaseActivity {
 
                 // Set the text for each card
                 TextView textView = (TextView) findViewById(resID2);
-                textView.setText(plantNameList.get(i-1));
+                textView.setText(plantList.get(i-1).getPlantName());
 
                 // Set the image for each card
                 // Get Firebase storage for plant photos
-                String photoFileName = plantNameList.get(i-1) + "_" + userName + ".jpg";
+                String photoFileName = plantList.get(i-1).getPhotoUrl();
                 Log.d("SelectPlantActivity", "onCreate - Photo file name: " + photoFileName);
                 mStorageReference = FirebaseStorage.getInstance().getReference().child("images/" + photoFileName);
                 ImageView imageView = (ImageView) findViewById(resID3);

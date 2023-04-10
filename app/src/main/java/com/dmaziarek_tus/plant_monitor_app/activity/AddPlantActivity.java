@@ -61,7 +61,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
     Spinner spinner;
     ImageView imageView;
     ProgressBar progressBar;
-    String userName, plantName, selectedPlantType, filename;
+    String userName, plantID, plantName, selectedPlantType, filename;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap mImageBitmap;
 
@@ -105,7 +105,6 @@ public class AddPlantActivity extends DrawerBaseActivity {
     // Add plant to database
     public void onButtonAddPlantClicked(View view) {
         plantName = editText_PlantName.getText().toString().trim();
-
         if(plantName.isEmpty()) {
             editText_PlantName.setError("Plant name is required");
             editText_PlantName.requestFocus();
@@ -121,12 +120,15 @@ public class AddPlantActivity extends DrawerBaseActivity {
                 if(exists) {
                     Toast.makeText(AddPlantActivity.this, "Plant with that name already exists", Toast.LENGTH_LONG).show();
                     int randomNum = (int) (Math.random() * 1000);
-                    plantName += "_" + randomNum;
+                    plantName += " " + randomNum;
+                    plantID = userName + "_plant_" + randomNum;
                     Log.d("AddPlantActivity", "onButtonAddPlantClicked, onPlantExists - Plant name: " + plantName);
                     addPlantToDB(view);
                 }
                 else {
                     Toast.makeText(AddPlantActivity.this, "Plant name is unique", Toast.LENGTH_LONG).show();
+                    int randomNum = (int) (Math.random() * 1000);
+                    plantID = userName + "_plant_" + randomNum;
                     addPlantToDB(view);
                 }
             }
@@ -134,21 +136,19 @@ public class AddPlantActivity extends DrawerBaseActivity {
     }
 
     public void addPlantToDB(View view) {
-        Log.d("AddPlantActivity", "onButtonAddPlantClicked, onPlantExists, addPlantToDB - Plant name: " + plantName);
-        PlantNamesSingleton.getInstance().addPlantName(plantName);
-        filename = plantName + "_" + userName;
-        Log.d("AddPlantActivity", "onButtonAddPlantClicked - Filename: " + filename);
-        Plant plant = new Plant(plantName, selectedPlantType, filename);
+        filename = plantID + ".jpg";    // Used for retrieving photo from storage
+        Plant plant = new Plant(plantID, plantName, selectedPlantType, filename);
+        PlantNamesSingleton.getInstance().addPlant(plant);
 
         FirebaseDatabase.getInstance().getReference("Users")
-            .child(userName).child("Plants").child(plantName).setValue(plant)
+            .child(userName).child("Plants").child(plantID).setValue(plant)
             .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         uploadPhoto(view, filename);
                         Toast.makeText(AddPlantActivity.this, "Plant added successfully", Toast.LENGTH_LONG).show();
                         Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant added to database");
                         Intent intent = new Intent(AddPlantActivity.this, PlantHealthActivity.class);
-                        intent.putExtra("plantName", plantName);
+                        intent.putExtra("plantID", plantID);
                         startActivity(intent);
                     } else {
                         Toast.makeText(AddPlantActivity.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
@@ -180,7 +180,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
             mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
 
-            StorageReference imagesRef = FirebaseStorage.getInstance().getReference().child("images/" + photoName + ".jpg");
+            StorageReference imagesRef = FirebaseStorage.getInstance().getReference().child("images/" + photoName);
 
             UploadTask uploadTask = imagesRef.putBytes(data);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
