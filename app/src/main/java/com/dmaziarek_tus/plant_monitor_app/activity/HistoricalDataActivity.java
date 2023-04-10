@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityHistoricalDataBinding;
+import com.dmaziarek_tus.plant_monitor_app.model.Plant;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
@@ -27,9 +28,9 @@ import java.util.ArrayList;
 
 public class HistoricalDataActivity extends DrawerBaseActivity {
     ActivityHistoricalDataBinding binding;
-    String plantName, userName;
+    String plantID, userName;
     double soilMoistureVal, sunlightVal, humidityVal, temperatureVal;
-    ArrayList<String> plantNameList = new ArrayList<>();
+    ArrayList<Plant> plantList = new ArrayList<>();
     ArrayList<Double> humidityList = new ArrayList<>();
     ArrayList<Integer> soilMoistureList = new ArrayList<>();
     ArrayList<Double> temperatureList = new ArrayList<>();
@@ -50,20 +51,20 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
         userName = UserUtils.getDisplayNameFromFirebase();
 
         Intent intent = getIntent();
-        plantName = intent.getStringExtra("plantName");
-        plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
-        Log.d("HistoricalDataActivity", "plantName: " + plantName);
+        plantID = intent.getStringExtra("plantID");
+        plantList = PlantNamesSingleton.getInstance().getPlantList();
+        Log.d("HistoricalDataActivity", "plantName: " + plantID);
 
-        if (plantNameList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
+        if (plantList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
             PlantUtils.noPlantsAdded(HistoricalDataActivity.this);
-        } else if (plantNameList.isEmpty()) {
+        } else if (plantList.isEmpty()) {
             PlantUtils.noPlantsAdded(HistoricalDataActivity.this);
         }
         // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
         // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
-        else if (plantName == null || plantName.isEmpty() || plantName.equals("")) {
-            Log.d("PlantHealthActivity", "Plant names: " + plantNameList);
-            plantName = plantNameList.get(0);  // Get the first plant name from the array list
+        else if (plantID == null || plantID.isEmpty() || plantID.equals("")) {
+            Log.d("PlantHealthActivity", "Plant names: " + plantList);
+            plantID = plantList.get(0).getPlantID();  // Get the first plant name from the array list
             retrieveDataAndPopulateCharts();
         }
         else {
@@ -95,7 +96,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
     }
 
     private void retrieveDataAndPopulateCharts() {
-        myRef = database.getReference("Users/" + userName + "/Plants/" + plantName + "/history");
+        myRef = database.getReference("Users/" + userName + "/Plants/" + plantID + "/history");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

@@ -13,8 +13,6 @@ import androidx.test.rule.ActivityTestRule;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.activity.SelectPlantActivity;
 import com.dmaziarek_tus.plant_monitor_app.activity.PlantHealthActivity;
-import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
-import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 
 import org.junit.Rule;
 import org.junit.Test;

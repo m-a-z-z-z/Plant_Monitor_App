@@ -1,6 +1,7 @@
 package com.dmaziarek_tus.plant_monitor_app.model;
 
 public class Plant {
+    String plantID;
     String plantName;
     int soil_Moisture;
     double irLight;
@@ -15,7 +16,8 @@ public class Plant {
 
     }
 
-    public Plant(String plantName, String plantType, String photoUrl) {
+    public Plant(String plantID, String plantName, String plantType, String photoUrl) {
+        this.plantID = plantID;
         this.plantName = plantName;
         this.plantType = plantType;
         this.photoUrl = photoUrl;
@@ -26,6 +28,10 @@ public class Plant {
         this.humidity = 0;
         this.temperature = 0;
     }
+
+    public String getPlantID() {return plantID;}
+
+    public void setPlantID(String plantID) { this.plantID = plantID;}
 
     public void setPlantName(String plantName) {
         this.plantName = plantName;

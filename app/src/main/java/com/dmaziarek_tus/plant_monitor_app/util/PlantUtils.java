@@ -21,12 +21,15 @@ import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.activity.AddPlantActivity;
 import com.dmaziarek_tus.plant_monitor_app.activity.PlantHealthActivity;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityHistoricalDataBinding;
+import com.dmaziarek_tus.plant_monitor_app.model.Plant;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,9 +44,9 @@ public class PlantUtils {
         activityContext.startActivity(intent);
     }
 
-    public static void plantSelected(Context activityContext, String plantName) {
+    public static void plantSelected(Context activityContext, String plantID) {
         Intent intent = new Intent(activityContext, PlantHealthActivity.class);
-        intent.putExtra("plantName", plantName);
+        intent.putExtra("plantID", plantID);
         activityContext.startActivity(intent);
     }
 
@@ -53,7 +56,7 @@ public class PlantUtils {
         Log.d("SignInActivity", "retrieveUserPlants - display name: " + userName);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants");
-        ArrayList<String> plantNameList = new ArrayList<>();
+        ArrayList<Plant> plantList = new ArrayList<>();
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -61,13 +64,20 @@ public class PlantUtils {
                 Iterable<DataSnapshot> children = snapshot.getChildren();
 
                 for (DataSnapshot child : children) {
-                    String plantName = child.getKey();
-                    plantNameList.add(plantName);
-                    Log.d("PlantUtils", "onDataChange - Plant name: " + plantName);
+                    String plantID = child.child("plantID").getValue(String.class); // Get plant ID
+                    String plantName = child.child("plantName").getValue(String.class); // Get plant name
+                    String plantType = child.child("plantType").getValue(String.class); // Get plant type
+                    String photoUrl = child.child("photoUrl").getValue(String.class); // Get plant URL
+                    Plant plant = new Plant(plantID, plantName, plantType, photoUrl);
+                    plantList.add(plant);
+                    Log.d("PlantUtils", "onDataChange - Plant name: " + plantName
+                            + "\nplant type: " + plantType
+                            + "\nplant ID: " + plantID
+                            + "\nphoto URL: " + photoUrl);
                 }
-                Log.d("PlantUtils", "onDataChange - Plant names: " + plantNameList);
+                Log.d("PlantUtils", "onDataChange - Plant names: " + plantList);
 
-                PlantNamesSingleton.getInstance().setPlantNames(plantNameList);
+                PlantNamesSingleton.getInstance().setPlantList(plantList);
                 myRef.removeEventListener(this);    // Remove listener to prevent multiple calls
             }
 
@@ -76,6 +86,20 @@ public class PlantUtils {
                 Log.d("PlantUtils", "onCancelled - Error: " + error.getMessage());
             }
         });
+    }
+
+    public static void updatePlantNameInDB(String plantID, String newPlantName, String plantType) {
+        String userName = UserUtils.getDisplayNameFromFirebase();
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants/" + plantID);
+        databaseReference1.child("plantName").setValue(newPlantName);
+        databaseReference1.child("plantType").setValue(plantType);
+
+    }
+
+    public static void deletePlantFromDB(String plantID) {
+        String userName = UserUtils.getDisplayNameFromFirebase();
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants/" + plantID);
+        databaseReference1.removeValue();
     }
 
     public static void checkForPlantsWithSameName(String plantName, OnPlantExistsCallback callback) {
@@ -130,6 +154,7 @@ public class PlantUtils {
                 for (DataSnapshot plantSnapshot : dataSnapshot.getChildren()) {
                     // Get the name of the plant
                     plantName = plantSnapshot.child("plantName").getValue(String.class);
+                    Log.d("PlantUtils", "onDataChange - plant name: " + plantName);
                     // Get the soil moisture of the plant
                     soilMoisture = plantSnapshot.child("soil_Moisture").getValue(Integer.class);
 

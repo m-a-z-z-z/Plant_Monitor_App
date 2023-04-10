@@ -2,16 +2,24 @@ package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import androidx.annotation.NonNull;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityPlantHealthBinding;
+import com.dmaziarek_tus.plant_monitor_app.model.Plant;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
 import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
@@ -29,9 +37,9 @@ public class PlantHealthActivity extends DrawerBaseActivity {
     TextView textView_SoilMoisture, textView_Sunlight, textView_Humidity, textView_Temperature, textView_readableHumid, textView_readableTemp, textView_plantName;
     FirebaseDatabase database;
     double soilMoistureVal, sunlightVal, humidityVal, temperatureVal;
-    String readableMoistureVal, readableSunlightVal, readableHumidityVal, readableTemperatureVal, plantName, plantType, userName;
+    String readableMoistureVal, readableSunlightVal, readableHumidityVal, readableTemperatureVal, plantID, plantName, plantType, userName;
     DecimalFormat df = new DecimalFormat("#.##");
-    ArrayList<String> plantNameList = new ArrayList<>();
+    ArrayList<Plant> plantList = new ArrayList<>();
 
 
     @Override
@@ -52,24 +60,24 @@ public class PlantHealthActivity extends DrawerBaseActivity {
 
         userName = UserUtils.getDisplayNameFromFirebase();
 
-        // Get plant name from previous activity
+        // Get plant ID from previous activity
         Intent intent = getIntent();
-        plantName = intent.getStringExtra("plantName");
-        plantNameList = PlantNamesSingleton.getInstance().getPlantNames();
-        Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantNameList);
+        plantID = intent.getStringExtra("plantID");
+        plantList = PlantNamesSingleton.getInstance().getPlantList();
+        Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantList);
 
         // I know this looks dumb but the app would crash every time if plantNameList == Null or plantNameList.isEmpty() was in one if statement
         // If the plant name list is empty, user will be redirected to add plants activity
-        if (plantNameList == null) {
+        if (plantList == null) {
             PlantUtils.noPlantsAdded(this);
-        } else if (plantNameList.isEmpty()) {
+        } else if (plantList.isEmpty()) {
             PlantUtils.noPlantsAdded(this);
         }
         // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
         // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
-        else if (plantName == null || plantName.isEmpty() || plantName == "") {
-            Log.d("PlantHealthActivity", "Plant names: " + plantNameList);
-            plantName = plantNameList.get(0);  // Get the first plant name from the array list
+        else if (plantID == null || plantID.isEmpty() || plantID == "") {
+            Log.d("PlantHealthActivity", "Plant names: " + plantList);
+            plantID = plantList.get(0).getPlantID();  // Get the first plant from the array list
             readPlantHealthValues();
         }
         else {
@@ -80,13 +88,72 @@ public class PlantHealthActivity extends DrawerBaseActivity {
 
     public void onHistoricalDataButtonClick(View view) {
         Intent intent = new Intent(this, HistoricalDataActivity.class);
-        intent.putExtra("plantName", plantName);
+        intent.putExtra("plantID", plantID);
         startActivity(intent);
     }
 
+    public void promptDeletePlant(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Plant");
+        builder.setMessage("Are you sure you want to delete this plant?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlantUtils.deletePlantFromDB(plantID);
+                PlantNamesSingleton.getInstance().removePlant(plantID);
+                Log.d("PlantHealthActivity", "Plant names: " + plantList);
+                Toast.makeText(PlantHealthActivity.this, "Plant deleted", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PlantHealthActivity.this, SelectPlantActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
+    public void promptChangePlantName(View view) {
+        // inflate the custom dialog layout
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_edit_plant, null);
+
+        // Get references to the UI elements in dialog
+        Spinner spinnerPlantType = dialogView.findViewById(R.id.spinner_PlantType);
+        EditText editTextPlantName = dialogView.findViewById(R.id.editText_PlantName);
+
+        // Set spinner
+        // Set spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.plant_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPlantType.setAdapter(adapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.setTitle("Change Plant Attributes");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newPlantName = editTextPlantName.getText().toString();
+                String newPlantType = spinnerPlantType.getSelectedItem().toString();
+                PlantUtils.updatePlantNameInDB(plantID, newPlantName, newPlantType);
+                textView_plantName.setText(newPlantName);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
     private void readPlantHealthValues() {
         database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants/" + plantName);
+        DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants/" + plantID);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
