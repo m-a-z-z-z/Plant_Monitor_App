@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.cardview.widget.CardView;
-
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityDashboardBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
-import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
-import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
-import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
+import com.dmaziarek_tus.plant_monitor_app.util.NotificationService;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantListSingleton;
 
 import java.util.ArrayList;
 
@@ -27,16 +24,8 @@ public class DashboardActivity extends DrawerBaseActivity {
         setContentView(binding.getRoot());
         allocateActivityTitle("Dashboard");
 
-//        ArrayList<Plant> plantList = PlantNamesSingleton.getInstance().getPlantList();
-//        Log.d("DashboardActivity", "onCreate - Plants: " + plantList);
-//        for (int i = 1; i < plantList.size()+1; i++) {
-//            Log.d("DashboardActivity", "onCreate - Plant: " + plantList.get(i).getPlantID());
-//            Log.d("DashboardActivity", "onCreate - Plant: " + plantList.get(i).getPlantName());
-//            Log.d("DashboardActivity", "onCreate - Plant: " + plantList.get(i).getPhotoUrl());
-//            Log.d("DashboardActivity", "onCreate - Plant: " + plantList.get(i).getPlantType());
-//        }
-
-
+        Intent intent = new Intent(this, NotificationService.class);
+        startService(intent);
     }
 
     public void onDashboardCVClick(View view) {

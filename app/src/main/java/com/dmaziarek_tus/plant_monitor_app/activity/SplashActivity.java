@@ -25,6 +25,10 @@ public class SplashActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);   // Hide status bar
 
+        if (mAuth.getCurrentUser() != null) {
+            Log.i("SplashActivity", "User is signed in");
+            PlantUtils.retrieveUserPlants();    // When user restarts app, plantNameList will null, so we need to retrieve the list again
+        }
         // Animations for splash screen
         lottieAnimationView.animate().translationY(-1500).setDuration(1000).setStartDelay(2500);
         textView.animate().translationY(1000).setDuration(1000).setStartDelay(2500);
@@ -38,14 +42,11 @@ public class SplashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     if (mAuth.getCurrentUser() != null) {
-                        Log.d("SplashActivity", "User is signed in");
-                        PlantUtils.notifyWhenPlantsCritical(SplashActivity.this);
-                        PlantUtils.retrieveUserPlants();    // When user restarts app, plantNameList will null, so we need to retrieve the list again
                         Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
                         startActivity(intent);
                         finish();   // finish() is used to destroy the activity, will stop the user navigating back to the splash screen
                     } else {
-                        Log.d("SplashActivity", "User is not signed in");
+                        Log.i("SplashActivity", "User is not signed in");
                         Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
                         startActivity(intent);
                         finish();   // finish() is used to destroy the activity, will stop the user navigating back to the splash screen

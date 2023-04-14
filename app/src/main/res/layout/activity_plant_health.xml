@@ -28,15 +28,23 @@
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/button"
         app:layout_constraintTop_toBottomOf="@+id/textView_plantName" />
 
     <TextView
         android:id="@+id/textView_SoilMoistureValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="human readable reading"
+        android:layout_marginStart="4dp"
+        android:text="Sensor reading"
+        app:layout_constraintBottom_toTopOf="@+id/textView_SoilMoistureStatus"
+        app:layout_constraintStart_toEndOf="@+id/textView_SoilMoistureLabel" />
+
+    <TextView
+        android:id="@+id/textView_SoilMoistureStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant Status"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,61 +59,27 @@
         android:textAlignment="textEnd"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_SoilMoistureValue" />
+        app:layout_constraintEnd_toEndOf="@+id/textView_SoilMoistureLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textView_SoilMoistureStatus" />
 
     <TextView
-        android:id="@+id/textView_HumidityValue"
+        android:id="@+id/textView_SunlightValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="sensor reading"
+        android:layout_marginStart="4dp"
+        android:text="Sensor reading"
+        app:layout_constraintBottom_toTopOf="@+id/textView_SunlightStatus"
+        app:layout_constraintStart_toEndOf="@+id/textView_SunlightLabel" />
+
+    <TextView
+        android:id="@+id/textView_SunlightStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant status"
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_HumidityLabel" />
-
-    <TextView
-        android:id="@+id/textView_TemperatureLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Temperature:"
-        android:textAlignment="textEnd"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_readableHumid" />
-
-    <TextView
-        android:id="@+id/textView_readableTemp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="human readable translation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_TemperatureValue" />
-
-    <TextView
-        android:id="@+id/textView_TemperatureValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="sensor reading"
-        android:textAlignment="textStart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_TemperatureLabel" />
-
-    <TextView
-        android:id="@+id/textView_readableHumid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="human readable translation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_HumidityValue" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_SunlightLabel" />
 
     <TextView
         android:id="@+id/textView_HumidityLabel"
@@ -116,19 +90,59 @@
         android:textAlignment="textEnd"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_SunlightValue" />
+        app:layout_constraintEnd_toEndOf="@+id/textView_SunlightLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textView_SunlightStatus" />
 
     <TextView
-        android:id="@+id/textView_SunlightValue"
+        android:id="@+id/textView_HumidityValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="human readable reading"
+        android:layout_marginStart="4dp"
+        android:text="Sensor reading"
         android:textAlignment="textStart"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_HumidityLabel"
+        app:layout_constraintStart_toEndOf="@+id/textView_HumidityLabel" />
+
+    <TextView
+        android:id="@+id/textView_HumidityStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant Status"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_SunlightLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_HumidityValue" />
+
+    <TextView
+        android:id="@+id/textView_TemperatureLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Temperature:"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/textView_HumidityLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textView_HumidityStatus" />
+
+    <TextView
+        android:id="@+id/textView_TemperatureValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="Sensor reading"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_TemperatureLabel"
+        app:layout_constraintStart_toEndOf="@+id/textView_TemperatureLabel" />
+
+    <TextView
+        android:id="@+id/textView_TemperatureStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant Status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_TemperatureValue" />
 
     <Button
         android:id="@+id/button"
@@ -142,14 +156,14 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_readableTemp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_TemperatureStatus" />
 
     <Button
         android:id="@+id/change_plant_name_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/primary_button"
-        android:onClick="promptChangePlantName"
+        android:onClick="promptEditPlantDetails"
         android:text="Update"
         android:textColor="@color/black"
         app:backgroundTint="@null"

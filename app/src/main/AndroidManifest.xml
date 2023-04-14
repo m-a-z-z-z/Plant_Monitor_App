@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Plant_Monitor_App"
         tools:targetApi="31">
+
+        <service android:name=".util.NotificationService"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name=".activity.HistoricalDataActivity"
             android:exported="false" />

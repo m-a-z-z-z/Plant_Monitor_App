@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editText_PlantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Plant Name"
+        android:inputType="text"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textView_PlantTypeLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_PreferredTempLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Preferred Temperatures"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_MinTemp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_PreferredMoisture"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView_MinTempLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Min."
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/seekBar_MinTemp"
+        app:layout_constraintTop_toTopOf="@+id/seekBar_MinTemp" />
+
+    <Button
+        android:id="@+id/cameraBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/secondary_button"
+        android:text="Take Photo"
+        android:textColor="@color/black"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_plantPhoto"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <SeekBar
+        android:id="@+id/seekBar_MinTemp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="60"
+        android:min="-10"
+        android:progress="1"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_MaxTemp"
+        app:layout_constraintEnd_toEndOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView_PreferredMoistureLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Preferred Soil Moisture"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/spinner_PreferredMoisture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_PlantType"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ImageView
+        android:id="@+id/imageView_plantPhoto"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:scaleType="fitCenter"
+        android:tooltipText="Preview of plant photo"
+        app:layout_constraintBottom_toTopOf="@+id/cameraBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_MaxTemp"
+        app:layout_constraintVertical_bias="0.5"
+        app:srcCompat="@drawable/ic_flower_alt" />
+
+    <TextView
+        android:id="@+id/textView_MinTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0°C"
+        app:layout_constraintStart_toEndOf="@+id/seekBar_MinTemp"
+        app:layout_constraintTop_toTopOf="@+id/seekBar_MinTemp" />
+
+    <Spinner
+        android:id="@+id/spinner_PlantType"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Plant Type"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textView_PreferredMoistureLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_PlantTypeLabel"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView_MaxTempLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Max."
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/seekBar_MaxTemp"
+        app:layout_constraintTop_toTopOf="@+id/seekBar_MaxTemp" />
+
+    <Spinner
+        android:id="@+id/spinner_PreferredMoisture"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Plant Type"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_PreferredMoistureLabel"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <SeekBar
+        android:id="@+id/seekBar_MaxTemp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:indeterminate="false"
+        android:max="60"
+        android:min="-10"
+        android:progress="1"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_plantPhoto"
+        app:layout_constraintEnd_toEndOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_MinTemp"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView_MaxTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0°C"
+        app:layout_constraintStart_toEndOf="@+id/seekBar_MaxTemp"
+        app:layout_constraintTop_toTopOf="@+id/seekBar_MaxTemp" />
+
+    <TextView
+        android:id="@+id/textView_PlantTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant Type"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/spinner_PlantType"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_PlantName"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

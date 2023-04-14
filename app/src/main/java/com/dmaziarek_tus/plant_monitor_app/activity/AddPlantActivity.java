@@ -1,67 +1,53 @@
 package com.dmaziarek_tus.plant_monitor_app.activity;
 
-import static com.dmaziarek_tus.plant_monitor_app.util.PlantUtils.checkForPlantsWithSameName;
-
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityAddPlantBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
-import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
-import com.dmaziarek_tus.plant_monitor_app.model.User;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantListSingleton;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
 
 public class AddPlantActivity extends DrawerBaseActivity {
     ActivityAddPlantBinding binding;
     EditText editText_PlantName;
+    TextView textView_MinTemp, textView_MaxTemp;
     Button button_AddPlant;
-    Spinner spinner;
+    Spinner spinner_PlantType, spinner_SoilMoisture;
     ImageView imageView;
     ProgressBar progressBar;
-    String userName, plantID, plantName, selectedPlantType, filename;
+    SeekBar minTempSeekbar, maxTempSeekbar;
+    String userName, plantID, plantName, selectedPlantType, selectedSoilMoisture, filename;
+    double minTemp, maxTemp;
+    int minMoisture, maxMoisture;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap mImageBitmap;
 
@@ -74,22 +60,29 @@ public class AddPlantActivity extends DrawerBaseActivity {
 
         // Get UI elements
         editText_PlantName = (EditText) findViewById(R.id.editText_PlantName);
-        spinner = (Spinner) findViewById(R.id.spinner_PlantType);
+        textView_MinTemp = (TextView) findViewById(R.id.textView_MinTemp);
+        textView_MaxTemp = (TextView) findViewById(R.id.textView_MaxTemp);
+        spinner_PlantType = (Spinner) findViewById(R.id.spinner_PlantType);
+        spinner_SoilMoisture = (Spinner) findViewById(R.id.spinner_PreferredMoisture);
         button_AddPlant = (Button) findViewById(R.id.button_AddPlant);
         imageView = (ImageView) findViewById(R.id.imageView_plantPhoto);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        minTempSeekbar = (SeekBar) findViewById(R.id.seekBar_MinTemp);
+        maxTempSeekbar = (SeekBar) findViewById(R.id.seekBar_MaxTemp);
 
-        // Set spinner
+        // Get user to add plant under
+        userName = UserUtils.getDisplayNameFromFirebase();
+
+        // Set spinner for plant type
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.plant_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        // Respond to spinner selection
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner_PlantType.setAdapter(adapter);
+        spinner_PlantType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedPlantType = parent.getItemAtPosition(position).toString();
                 Log.d("AddPlantActivity", "onItemSelected: " + selectedPlantType);
-                spinner.setOnItemSelectedListener(this);
+                spinner_PlantType.setOnItemSelectedListener(this);
             }
 
             @Override
@@ -98,8 +91,52 @@ public class AddPlantActivity extends DrawerBaseActivity {
             }
         });
 
-        // Get user to add plant under
-        userName = UserUtils.getDisplayNameFromFirebase();
+        // Set spinner for soil moisture
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.preferred_soil_moisture, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_SoilMoisture.setAdapter(adapter2);
+        spinner_SoilMoisture.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedSoilMoisture = parent.getItemAtPosition(position).toString();
+                Log.d("AddPlantActivity", "onItemSelected: " + selectedSoilMoisture);
+                spinner_SoilMoisture.setOnItemSelectedListener(this);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // Set seekbars for min and max temperature
+        minTempSeekbar.setMax(60); minTempSeekbar.setProgress(1);
+        minTempSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                minTemp = progress;
+                textView_MinTemp.setText(minTemp + "°C");
+                Log.d("AddPlantActivity", "onProgressChanged - Min temp: " + minTemp);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+
+        maxTempSeekbar.setMax(60); maxTempSeekbar.setProgress(1);
+        maxTempSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                maxTemp = progress;
+                textView_MaxTemp.setText(maxTemp + "°C");
+                Log.d("AddPlantActivity", "onProgressChanged - Max temp: " + maxTemp);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
     }
 
     // Add plant to database
@@ -110,46 +147,52 @@ public class AddPlantActivity extends DrawerBaseActivity {
             editText_PlantName.requestFocus();
             return;
         }
+        int randomNum = (int) (Math.random() * 1000);
+        plantID = "plant_" + plantName + "_" + randomNum;
+        plantID = plantID.replaceAll("\\s+",""); // Remove whitespace as filename cannot contain whitespace
+        filename = plantID + ".jpg";    // Used for retrieving photo from storage
+
+        switch (selectedSoilMoisture) {
+            case "0%-20% (Extremely dry)":
+                minMoisture = 0;
+                maxMoisture = 20;
+                break;
+            case "21%-40% (Dryish - Well drained)":
+                minMoisture = 21;
+                maxMoisture = 40;
+                break;
+            case "41%-60% (Tolerates moist soil)":
+                minMoisture = 41;
+                maxMoisture = 60;
+                break;
+            case "61%-80% (Tolerates wet soil)":
+                minMoisture = 61;
+                maxMoisture = 80;
+                break;
+            case "81%-100% (Extremely wet)":
+                minMoisture = 81;
+                maxMoisture = 100;
+                break;
+        }
 
         progressBar.setVisibility(View.VISIBLE);
         button_AddPlant.setVisibility(View.GONE);
 
-        checkForPlantsWithSameName(plantName, new PlantUtils.OnPlantExistsCallback() {
-            @Override
-            public void onPlantExists(boolean exists) {
-                if(exists) {
-                    Toast.makeText(AddPlantActivity.this, "Plant with that name already exists", Toast.LENGTH_LONG).show();
-                    int randomNum = (int) (Math.random() * 1000);
-                    plantName += " " + randomNum;
-                    plantID = userName + "_plant_" + randomNum;
-                    Log.d("AddPlantActivity", "onButtonAddPlantClicked, onPlantExists - Plant name: " + plantName);
-                    addPlantToDB(view);
-                }
-                else {
-                    Toast.makeText(AddPlantActivity.this, "Plant name is unique", Toast.LENGTH_LONG).show();
-                    int randomNum = (int) (Math.random() * 1000);
-                    plantID = userName + "_plant_" + randomNum;
-                    addPlantToDB(view);
-                }
-            }
-        });
+        addPlantToDB(view);
     }
 
     public void addPlantToDB(View view) {
-        filename = plantID + ".jpg";    // Used for retrieving photo from storage
-        Plant plant = new Plant(plantID, plantName, selectedPlantType, filename);
-        PlantNamesSingleton.getInstance().addPlant(plant);
+        Plant plant = new Plant(plantID, plantName, selectedPlantType, filename, minMoisture, maxMoisture, minTemp, maxTemp);
+        PlantListSingleton.getInstance().addPlant(plant);
 
-        FirebaseDatabase.getInstance().getReference("Users")
-            .child(userName).child("Plants").child(plantID).setValue(plant)
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(userName).child("Plants");
+        usersRef.child(plantID).setValue(plant)
             .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         uploadPhoto(view, filename);
                         Toast.makeText(AddPlantActivity.this, "Plant added successfully", Toast.LENGTH_LONG).show();
                         Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant added to database");
-                        Intent intent = new Intent(AddPlantActivity.this, PlantHealthActivity.class);
-                        intent.putExtra("plantID", plantID);
-                        startActivity(intent);
+                        PlantUtils.plantSelected(this, plant);
                     } else {
                         Toast.makeText(AddPlantActivity.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
                         Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant not added to database");
@@ -164,6 +207,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

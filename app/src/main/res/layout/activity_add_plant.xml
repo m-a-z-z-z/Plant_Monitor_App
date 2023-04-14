@@ -10,13 +10,12 @@
         android:id="@+id/textView_PlantNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Plant Details"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editText_PlantName"
@@ -33,50 +32,53 @@
 
     <Spinner
         android:id="@+id/spinner_PlantType"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:contentDescription="Plant Type"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_PlantName" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_PlantTypeLabel" />
 
     <Button
         android:id="@+id/button_AddPlant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/primary_button"
         android:onClick="onButtonAddPlantClicked"
         android:text="Add Plant"
-        android:background="@drawable/primary_button"
         android:textColor="@color/black"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cameraBtn" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/cameraBtn"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_plantPhoto" />
 
     <ImageView
         android:id="@+id/imageView_plantPhoto"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
         android:layout_marginTop="16dp"
-        android:tooltipText="Preview of plant photo"
         android:scaleType="fitCenter"
+        android:tooltipText="Preview of plant photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_PlantType"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_MaxTemp"
         app:srcCompat="@drawable/ic_flower_alt" />
 
     <Button
         android:id="@+id/cameraBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/secondary_button"
         android:onClick="onButtonTakePhotoClick"
         android:text="Take Photo"
-        android:background="@drawable/secondary_button"
         android:textColor="@color/black"
         app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_AddPlant"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_plantPhoto" />
 
@@ -91,5 +93,116 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cameraBtn" />
 
+    <TextView
+        android:id="@+id/textView_PlantTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Plant Type"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_PlantName" />
+
+    <TextView
+        android:id="@+id/textView_PreferredMoistureLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Preferred Soil Moisture"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_PlantType" />
+
+    <Spinner
+        android:id="@+id/spinner_PreferredMoisture"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="Plant Type"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_PreferredMoistureLabel" />
+
+    <TextView
+        android:id="@+id/textView_PreferredTempLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Preferred Temperatures"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_PreferredMoisture" />
+
+    <SeekBar
+        android:id="@+id/seekBar_MaxTemp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:indeterminate="false"
+        android:max="60"
+        android:min="-10"
+        android:progress="1"
+        app:layout_constraintEnd_toEndOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintStart_toStartOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_MinTemp" />
+
+    <TextView
+        android:id="@+id/textView_MinTempLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Min."
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/seekBar_MinTemp"
+        app:layout_constraintTop_toBottomOf="@+id/textView_PreferredTempLabel" />
+
+    <SeekBar
+        android:id="@+id/seekBar_MinTemp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:max="60"
+        android:min="-10"
+        android:progress="1"
+        app:layout_constraintEnd_toEndOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintStart_toStartOf="@+id/textView_PreferredTempLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textView_PreferredTempLabel" />
+
+    <TextView
+        android:id="@+id/textView_MaxTempLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Max."
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/seekBar_MaxTemp"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_MinTemp" />
+
+    <TextView
+        android:id="@+id/textView_MinTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0°C"
+        app:layout_constraintStart_toEndOf="@+id/seekBar_MinTemp"
+        app:layout_constraintTop_toBottomOf="@+id/textView_PreferredTempLabel" />
+
+    <TextView
+        android:id="@+id/textView_MaxTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="0°C"
+        app:layout_constraintStart_toEndOf="@+id/seekBar_MaxTemp"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_MinTemp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

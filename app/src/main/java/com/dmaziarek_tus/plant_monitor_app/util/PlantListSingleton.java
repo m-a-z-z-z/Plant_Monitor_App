@@ -4,16 +4,15 @@ import com.dmaziarek_tus.plant_monitor_app.model.Plant;
 
 import java.util.ArrayList;
 
-public class PlantNamesSingleton {
-    private static PlantNamesSingleton instance = null;
-    private ArrayList<String> plantNameList;
+public class PlantListSingleton {
+    private static PlantListSingleton instance = null;
     private ArrayList<Plant> plantList;
 
-    private PlantNamesSingleton() {}
+    private PlantListSingleton() {}
 
-    public static PlantNamesSingleton getInstance() {
+    public static PlantListSingleton getInstance() {
         if (instance == null) {
-            instance = new PlantNamesSingleton();
+            instance = new PlantListSingleton();
         }
         return instance;
     }

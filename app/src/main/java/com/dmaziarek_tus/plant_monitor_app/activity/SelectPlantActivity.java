@@ -14,8 +14,7 @@ import com.bumptech.glide.Glide;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivitySelectPlantBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
-import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
-import com.dmaziarek_tus.plant_monitor_app.model.User;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantListSingleton;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -55,14 +54,10 @@ public class SelectPlantActivity extends DrawerBaseActivity {
         userName = UserUtils.getDisplayNameFromFirebase();
 
         // Set the array list from the singleton
-        plantList = PlantNamesSingleton.getInstance().getPlantList();
+        plantList = PlantListSingleton.getInstance().getPlantList();
         Log.d("SelectPlantActivity", "onCreate - Plants: " + plantList);
 
-        // I know this looks dumb but the app would crash every time if plantNameList == Null || plantNameList.isEmpty() was in one if statement
-        if (plantList == null) {    // Shouldn't be necessary anymore but keeping it just in case
-            PlantUtils.noPlantsAdded(this);
-            Log.d("SelectPlantActivity", "onCreate - No plants added, launching add plant activity");
-        } else if (plantList.isEmpty()) {
+        if (plantList.isEmpty()) {
             PlantUtils.noPlantsAdded(this);
             Log.d("SelectPlantActivity", "onCreate - No plants added, launching add plant activity");
         } else {
@@ -80,10 +75,11 @@ public class SelectPlantActivity extends DrawerBaseActivity {
                 CardView cardView = (CardView) findViewById(resID);
                 cardView.setVisibility(View.VISIBLE);
 
-                // Set the text for each card
+                // Set the plant name in the text view
                 TextView textView = (TextView) findViewById(resID2);
                 textView.setText(plantList.get(i-1).getPlantName());
 
+                // Set the plantID in hidden text view
                 TextView textView2 = (TextView) findViewById(resID3);
                 textView2.setText(plantList.get(i-1).getPlantID());
 
@@ -102,38 +98,50 @@ public class SelectPlantActivity extends DrawerBaseActivity {
     }
 
     public void onPlantCardViewClicked(View view) {
+        String selectedPlantID = null;
         switch (view.getId()) {
             case R.id.card_view1:
-                PlantUtils.plantSelected(this, cardviewidText1.getText().toString());
+                selectedPlantID = cardviewidText1.getText().toString();
                 break;
             case R.id.card_view2:
-                PlantUtils.plantSelected(this, cardviewidText2.getText().toString());
+                selectedPlantID = cardviewidText2.getText().toString();
                 break;
             case R.id.card_view3:
-                PlantUtils.plantSelected(this, cardviewidText3.getText().toString());
+                selectedPlantID = cardviewidText3.getText().toString();
                 break;
             case R.id.card_view4:
-                PlantUtils.plantSelected(this, cardviewidText4.getText().toString());
+                selectedPlantID = cardviewidText4.getText().toString();
                 break;
             case R.id.card_view5:
-                PlantUtils.plantSelected(this, cardviewidText5.getText().toString());
+                selectedPlantID = cardviewidText5.getText().toString();
+
                 break;
             case R.id.card_view6:
-                PlantUtils.plantSelected(this, cardviewidText6.getText().toString());
+                selectedPlantID = cardviewidText6.getText().toString();
                 break;
             case R.id.card_view7:
-                PlantUtils.plantSelected(this, cardviewidText7.getText().toString());
+                selectedPlantID = cardviewidText7.getText().toString();
                 break;
             case R.id.card_view8:
-                PlantUtils.plantSelected(this, cardviewidText8.getText().toString());
+                selectedPlantID = cardviewidText8.getText().toString();
                 break;
             case R.id.card_view9:
-                PlantUtils.plantSelected(this, cardviewidText9.getText().toString());
+                selectedPlantID = cardviewidText9.getText().toString();
                 break;
             case R.id.card_view10:
-                PlantUtils.plantSelected(this, cardviewidText10.getText().toString());
+                selectedPlantID = cardviewidText10.getText().toString();
                 break;
         }
-        finish();
+
+        for(Plant plant : plantList) {
+            Log.d("SelectPlantActivity", "onPlantCardViewClicked" + "\nPlant ID: " + plant.getPlantID() + "\nSelected plant ID: " + selectedPlantID);
+            if(plant.getPlantID().equals(selectedPlantID)) {
+                PlantUtils.plantSelected(this, plant);
+                finish();
+                return;
+            }
+        }
+        // If the plant is not found, show an error message. Shouldn't be possible though
+        Toast.makeText(this, "Error! Plant not found.", Toast.LENGTH_SHORT).show();
     }
 }

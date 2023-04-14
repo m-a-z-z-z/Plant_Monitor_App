@@ -2,35 +2,26 @@ package com.dmaziarek_tus.plant_monitor_app.util;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.activity.AddPlantActivity;
 import com.dmaziarek_tus.plant_monitor_app.activity.PlantHealthActivity;
-import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityHistoricalDataBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
-import com.dmaziarek_tus.plant_monitor_app.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,9 +35,9 @@ public class PlantUtils {
         activityContext.startActivity(intent);
     }
 
-    public static void plantSelected(Context activityContext, String plantID) {
+    public static void plantSelected(Context activityContext, Plant plant) {
         Intent intent = new Intent(activityContext, PlantHealthActivity.class);
-        intent.putExtra("plantID", plantID);
+        intent.putExtra("plant", plant);
         activityContext.startActivity(intent);
     }
 
@@ -68,16 +59,26 @@ public class PlantUtils {
                     String plantName = child.child("plantName").getValue(String.class); // Get plant name
                     String plantType = child.child("plantType").getValue(String.class); // Get plant type
                     String photoUrl = child.child("photoUrl").getValue(String.class); // Get plant URL
-                    Plant plant = new Plant(plantID, plantName, plantType, photoUrl);
+                    int minMoisture = child.child("minSoilMoisture").getValue(int.class); // Get plant preferred soil moisture
+                    int maxMoisture = child.child("maxSoilMoisture").getValue(int.class); // Get plant preferred soil moisture
+                    double minTemp = child.child("minTemp").getValue(double.class);
+                    double maxTemp = child.child("maxTemp").getValue(double.class);
+                    Plant plant = new Plant(plantID, plantName, plantType, photoUrl, minMoisture, maxMoisture, minTemp, maxTemp);
                     plantList.add(plant);
-                    Log.d("PlantUtils", "onDataChange - Plant name: " + plantName
+                    Log.d("PlantUtils", "retrieveUserPlants, onDataChange"
+                            + "\nPlant name: " + plantName
                             + "\nplant type: " + plantType
                             + "\nplant ID: " + plantID
-                            + "\nphoto URL: " + photoUrl);
+                            + "\nphoto URL: " + photoUrl
+                            + "\nmin. moisture: " + minMoisture
+                            + "\nmax moisture: " + maxMoisture
+                            + "\nmin temp: " + minTemp
+                            + "\nmax temp: " + maxTemp
+                    );
                 }
                 Log.d("PlantUtils", "onDataChange - Plant names: " + plantList);
 
-                PlantNamesSingleton.getInstance().setPlantList(plantList);
+                PlantListSingleton.getInstance().setPlantList(plantList);
                 myRef.removeEventListener(this);    // Remove listener to prevent multiple calls
             }
 
@@ -88,12 +89,15 @@ public class PlantUtils {
         });
     }
 
-    public static void updatePlantNameInDB(String plantID, String newPlantName, String plantType) {
+    public static void updatePlantDetailsInDB(String plantID, String newPlantName, String plantType, int minMoisture, int maxMoisture, double minTemp, double maxTemp) {
         String userName = UserUtils.getDisplayNameFromFirebase();
         DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants/" + plantID);
         databaseReference1.child("plantName").setValue(newPlantName);
         databaseReference1.child("plantType").setValue(plantType);
-
+        databaseReference1.child("minSoilMoisture").setValue(minMoisture);
+        databaseReference1.child("maxSoilMoisture").setValue(maxMoisture);
+        databaseReference1.child("minTemp").setValue(minTemp);
+        databaseReference1.child("maxTemp").setValue(maxTemp);
     }
 
     public static void deletePlantFromDB(String plantID) {
@@ -102,6 +106,7 @@ public class PlantUtils {
         databaseReference1.removeValue();
     }
 
+    // Not needed anymore but might be useful in the future
     public static void checkForPlantsWithSameName(String plantName, OnPlantExistsCallback callback) {
         String userName = UserUtils.getDisplayNameFromFirebase();
         DatabaseReference plantsRef = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants");
@@ -122,7 +127,6 @@ public class PlantUtils {
             }
         });
     }
-
     public interface OnPlantExistsCallback {
         void onPlantExists(boolean exists);
     }
@@ -154,9 +158,9 @@ public class PlantUtils {
                 for (DataSnapshot plantSnapshot : dataSnapshot.getChildren()) {
                     // Get the name of the plant
                     plantName = plantSnapshot.child("plantName").getValue(String.class);
-                    Log.d("PlantUtils", "onDataChange - plant name: " + plantName);
+                    Log.d("PlantUtils", "notifyWhenPlantsCritical, onDataChange - plant name: " + plantName);
                     // Get the soil moisture of the plant
-                    soilMoisture = plantSnapshot.child("soil_Moisture").getValue(Integer.class);
+                    soilMoisture = plantSnapshot.child("soilMoisture").getValue(Integer.class);
 
                     soilMoistureMap.put(plantName, soilMoisture);   // Add plant name and soil moi
                 }
@@ -183,9 +187,10 @@ public class PlantUtils {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle errors here
-                Log.d("PlantUtils", "onCancelled - Error: " + databaseError.getMessage());
+                Log.e("PlantUtils", "onCancelled - Error: " + databaseError.getMessage());
             }
         });
 
     }
+
 }

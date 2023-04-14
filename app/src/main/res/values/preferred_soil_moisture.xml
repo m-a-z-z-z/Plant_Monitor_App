@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="preferred_soil_moisture">
+        <item>0%-20% (Extremely dry)</item>
+        <item>21%-40% (Dryish - Well drained)</item>
+        <item>41%-60% (Tolerates moist soil)</item>
+        <item>61%-80% (Tolerates wet soil)</item>
+        <item>81%-100% (Grows in water)</item>
+    </string-array>
+</resources>

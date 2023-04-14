@@ -7,12 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +22,7 @@ import android.widget.Toast;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityPlantHealthBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
-import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
-import com.dmaziarek_tus.plant_monitor_app.model.User;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantListSingleton;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -34,13 +35,15 @@ import java.util.ArrayList;
 
 public class PlantHealthActivity extends DrawerBaseActivity {
     ActivityPlantHealthBinding binding;
-    TextView textView_SoilMoisture, textView_Sunlight, textView_Humidity, textView_Temperature, textView_readableHumid, textView_readableTemp, textView_plantName;
+    TextView textView_SoilMoistureValue, textView_SoilMoistureStatus, textView_SunlightValue, textView_SunlightStatus, textView_HumidityValue, textView_HumidityStatus, textView_TemperatureValue, textView_TemperatureStatus, textView_plantName;
     FirebaseDatabase database;
     double soilMoistureVal, sunlightVal, humidityVal, temperatureVal;
-    String readableMoistureVal, readableSunlightVal, readableHumidityVal, readableTemperatureVal, plantID, plantName, plantType, userName;
+    int minTemp, maxTemp;
+    int minMoisture, maxMoisture;
+    String readableMoistureVal, readableSunlightVal, readableHumidityVal, readableTemperatureVal, plantID, plantName, plantType, userName, selectedSoilMoisture;
     DecimalFormat df = new DecimalFormat("#.##");
     ArrayList<Plant> plantList = new ArrayList<>();
-
+    Plant plant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,38 +53,36 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         allocateActivityTitle("Plant Health Values");
 
         // Get UI elements
-        textView_SoilMoisture = (TextView) findViewById(R.id.textView_SoilMoistureValue);
-        textView_Sunlight = (TextView) findViewById(R.id.textView_SunlightValue);
-        textView_Humidity = (TextView) findViewById(R.id.textView_HumidityValue);
-        textView_Temperature = (TextView) findViewById(R.id.textView_TemperatureValue);
-        textView_readableHumid = (TextView) findViewById(R.id.textView_readableHumid);
-        textView_readableTemp = (TextView) findViewById(R.id.textView_readableTemp);
+        textView_SoilMoistureValue = (TextView) findViewById(R.id.textView_SoilMoistureValue);
+        textView_SoilMoistureStatus = (TextView) findViewById(R.id.textView_SoilMoistureStatus);
+        textView_SunlightValue = (TextView) findViewById(R.id.textView_SunlightValue);
+        textView_SunlightStatus = (TextView) findViewById(R.id.textView_SunlightStatus);
+        textView_HumidityValue = (TextView) findViewById(R.id.textView_HumidityValue);
+        textView_HumidityStatus = (TextView) findViewById(R.id.textView_HumidityStatus);
+        textView_TemperatureValue = (TextView) findViewById(R.id.textView_TemperatureValue);
+        textView_TemperatureStatus = (TextView) findViewById(R.id.textView_TemperatureStatus);
         textView_plantName = (TextView) findViewById(R.id.textView_plantName);
 
         userName = UserUtils.getDisplayNameFromFirebase();
 
-        // Get plant ID from previous activity
+        // Get plant object from previous activity
         Intent intent = getIntent();
-        plantID = intent.getStringExtra("plantID");
-        plantList = PlantNamesSingleton.getInstance().getPlantList();
+        plant = (Plant) intent.getSerializableExtra("plant");
+        // If user does not go through select plant activity, get plant from list
+        plantList = PlantListSingleton.getInstance().getPlantList();
         Log.d("SelectPlantActivity", "onCreate - Plant names: " + plantList);
 
-        // I know this looks dumb but the app would crash every time if plantNameList == Null or plantNameList.isEmpty() was in one if statement
-        // If the plant name list is empty, user will be redirected to add plants activity
-        if (plantList == null) {
-            PlantUtils.noPlantsAdded(this);
-        } else if (plantList.isEmpty()) {
-            PlantUtils.noPlantsAdded(this);
-        }
-        // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
-        // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
-        else if (plantID == null || plantID.isEmpty() || plantID == "") {
-            Log.d("PlantHealthActivity", "Plant names: " + plantList);
-            plantID = plantList.get(0).getPlantID();  // Get the first plant from the array list
+        if (plant != null) { // Will execute if user goes through select plant activity
+            Log.d("PlantHealthActivity", "Plant retrieved from intent");
+            plantID = plant.getPlantID();
             readPlantHealthValues();
-        }
-        else {
+        } else if (!plantList.isEmpty()) { // Will execute if user does not go through select plant activity and has plants
+            Log.d("PlantHealthActivity", "Plant retrieved from list");
+            plant = plantList.get(0);
+            plantID = plant.getPlantID();
             readPlantHealthValues();
+        } else { // Will execute if user has no plants
+            PlantUtils.noPlantsAdded(this);
         }
 
     }
@@ -100,11 +101,13 @@ public class PlantHealthActivity extends DrawerBaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 PlantUtils.deletePlantFromDB(plantID);
-                PlantNamesSingleton.getInstance().removePlant(plantID);
+                PlantListSingleton.getInstance().removePlant(plantID);
                 Log.d("PlantHealthActivity", "Plant names: " + plantList);
                 Toast.makeText(PlantHealthActivity.this, "Plant deleted", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(PlantHealthActivity.this, SelectPlantActivity.class);
+                Intent intent = new Intent(PlantHealthActivity.this, DashboardActivity.class);
                 startActivity(intent);
+                finish();
+                return;
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -116,20 +119,70 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         builder.show();
     }
 
-    public void promptChangePlantName(View view) {
+    public void promptEditPlantDetails(View view) {
         // inflate the custom dialog layout
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_edit_plant, null);
+        View dialogView = inflater.inflate(R.layout.dialog_edit_plant2, null);
 
         // Get references to the UI elements in dialog
-        Spinner spinnerPlantType = dialogView.findViewById(R.id.spinner_PlantType);
         EditText editTextPlantName = dialogView.findViewById(R.id.editText_PlantName);
+        Spinner spinnerPlantType = dialogView.findViewById(R.id.spinner_PlantType);
+        Spinner spinnerPreferredMoisture = dialogView.findViewById(R.id.spinner_PreferredMoisture);
+        SeekBar seekbarMinTemp = dialogView.findViewById(R.id.seekBar_MinTemp);
+        SeekBar seekbarMaxTemp = dialogView.findViewById(R.id.seekBar_MaxTemp);
+        TextView textViewMinTemp = dialogView.findViewById(R.id.textView_MinTemp);
+        TextView textViewMaxTemp = dialogView.findViewById(R.id.textView_MaxTemp);
+        ImageView imageViewPlantPhoto = dialogView.findViewById(R.id.imageView_plantPhoto);
+        Button cameraBtn = dialogView.findViewById(R.id.cameraBtn);
 
-        // Set spinner
-        // Set spinner
+        // Set current name of plant in the dialog
+        editTextPlantName.setText(plant.getPlantName());
+        textViewMinTemp.setText(String.valueOf(plant.getMinTemp()));
+        textViewMaxTemp.setText(String.valueOf(plant.getMaxTemp()));
+
+        // Set plant type spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.plant_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPlantType.setAdapter(adapter);
+
+        // Set preferred moisture spinner
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.preferred_soil_moisture, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPreferredMoisture.setAdapter(adapter2);
+
+        // Seekbar for min temp
+        // Set the seekbar to the current min temp
+        minTemp = (int) plant.getMinTemp();
+        seekbarMinTemp.setProgress(minTemp);
+        seekbarMinTemp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                minTemp = progress;
+                textViewMinTemp.setText(minTemp + "°C");
+                Log.d("AddPlantActivity", "onProgressChanged - Min temp: " + minTemp);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+
+        // Seekbar for max temp
+        // Set the seekbar to the current max temp
+        maxTemp = (int) plant.getMaxTemp();
+        seekbarMaxTemp.setProgress(maxTemp);
+        seekbarMaxTemp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                maxTemp = progress;
+                textViewMaxTemp.setText(maxTemp + "°C");
+                Log.d("AddPlantActivity", "onProgressChanged - Max temp: " + maxTemp);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
@@ -137,10 +190,51 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String newPlantName = editTextPlantName.getText().toString();
-                String newPlantType = spinnerPlantType.getSelectedItem().toString();
-                PlantUtils.updatePlantNameInDB(plantID, newPlantName, newPlantType);
+                selectedSoilMoisture = spinnerPreferredMoisture.getSelectedItem().toString();
+                switch (selectedSoilMoisture) {
+                    case "0%-20% (Extremely dry)":
+                        minMoisture = 0;
+                        maxMoisture = 20;
+                        break;
+                    case "21%-40% (Dryish - Well drained)":
+                        minMoisture = 21;
+                        maxMoisture = 40;
+                        break;
+                    case "41%-60% (Tolerates moist soil)":
+                        minMoisture = 41;
+                        maxMoisture = 60;
+                        break;
+                    case "61%-80% (Tolerates wet soil)":
+                        minMoisture = 61;
+                        maxMoisture = 80;
+                        break;
+                    case "81%-100% (Extremely wet)":
+                        minMoisture = 81;
+                        maxMoisture = 100;
+                        break;
+                }
+
+                String newPlantName = editTextPlantName.getText().toString(); plant.setPlantName(newPlantName);
+                String newPlantType = spinnerPlantType.getSelectedItem().toString(); plant.setPlantType(newPlantType);
+                int newMinMoisture = minMoisture; plant.setMinSoilMoisture(newMinMoisture);
+                int newMaxMoisture = maxMoisture; plant.setMaxSoilMoisture(newMaxMoisture);
+                double newMinTemp = minTemp; plant.setMinTemp(newMinTemp);
+                double newMaxTemp = maxTemp; plant.setMaxTemp(newMaxTemp);
+
+                PlantUtils.updatePlantDetailsInDB(plantID, newPlantName, newPlantType, newMinMoisture, newMaxMoisture, newMinTemp, newMaxTemp);
                 textView_plantName.setText(newPlantName);
+
+                // Update the plant in the plant list
+                for(Plant p : plantList) {
+                    if(p.getPlantID().equals(plant.getPlantID())) {
+                        p.setPlantName(newPlantName);
+                        p.setPlantType(newPlantType);
+                        p.setMinSoilMoisture(newMinMoisture);
+                        p.setMaxSoilMoisture(newMaxMoisture);
+                        p.setMinTemp(newMinTemp);
+                        p.setMaxTemp(newMaxTemp);
+                    }
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -151,6 +245,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         });
         builder.show();
     }
+
     private void readPlantHealthValues() {
         database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants/" + plantID);
@@ -159,125 +254,68 @@ public class PlantHealthActivity extends DrawerBaseActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 plantName = snapshot.child("plantName").getValue().toString();
                 plantType = snapshot.child("plantType").getValue().toString();
-                soilMoistureVal = Double.valueOf(snapshot.child("soil_Moisture").getValue().toString());
+                soilMoistureVal = Double.valueOf(snapshot.child("soilMoisture").getValue().toString());
                 sunlightVal = Double.valueOf(snapshot.child("visLight").getValue().toString());
                 humidityVal = Double.valueOf(snapshot.child("humidity").getValue().toString());
                 temperatureVal = Double.valueOf(snapshot.child("temperature").getValue().toString());
 
                 // Checks for soil moisture
-                if (soilMoistureVal <= 550) {
-                    readableMoistureVal = " - Soil is too wet";
-                } else if (soilMoistureVal >= 551 && soilMoistureVal <= 650) {
-                    readableMoistureVal = " - Moist";
-                } else if (soilMoistureVal >= 651 && soilMoistureVal <= 700) {
-                    readableMoistureVal = " - Dry";
-                } else if (soilMoistureVal >= 701 && soilMoistureVal <= 1000) {
-                    readableMoistureVal = " - Very dry";
-                } else if (soilMoistureVal == 0) {
-                    readableMoistureVal = " - Error or no sensor active";
-                }
-                else {
-                    readableMoistureVal = "Error";
+                if (soilMoistureVal > plant.getMaxSoilMoisture()) {
+                    readableMoistureVal = "Too wet. Recommended moisture is " + plant.getMaxSoilMoisture() + "% - " + plant.getMinSoilMoisture() + "%";
+                } else if (soilMoistureVal < plant.getMinSoilMoisture()) {
+                    readableMoistureVal = "Too dry. Recommended moisture is " + plant.getMaxSoilMoisture() + "% - " + plant.getMinSoilMoisture() + "%";
+                } else {
+                    readableMoistureVal = "Moisture is correct";
                 }
 
                 // Checks for sunlight
                 if (sunlightVal >= 0 && sunlightVal <= 100) {
-                    readableSunlightVal = " - Dark";
+                    readableSunlightVal = "Dark";
                 } else if (sunlightVal >= 100 && sunlightVal <= 300) {
-                    readableSunlightVal = " - Dim";
+                    readableSunlightVal = "Dim";
                 } else if (sunlightVal >= 300 && sunlightVal <= 500) {
-                    readableSunlightVal = " - Bright";
+                    readableSunlightVal = "Bright";
                 } else if (sunlightVal >= 500 && sunlightVal <= 1023) {
-                    readableSunlightVal = " - Very bright";
+                    readableSunlightVal = "Very bright";
                 } else {
                     readableSunlightVal = "Error";
                 }
 
                 // Checks for humidity
                 if (humidityVal >= 0 && humidityVal <= 25) {
-                    readableHumidityVal = "Dry air";
-                } else if (humidityVal >= 26 && humidityVal <= 50) {
+                    readableHumidityVal = "Air is too dry. May cause damage to plant.";
+                } else if (humidityVal > 25 && humidityVal < 39) {
+                    readableHumidityVal = "Consider increasing humidity levels around plant.";
+                } else if (humidityVal >= 40 && humidityVal <= 70) {
                     readableHumidityVal  = "Ideal humidity";
-                } else if (humidityVal > 50) {
+                } else if (humidityVal > 90) {
                     readableHumidityVal = "Too humid. Mold and mildew prone.";
                 }
 
                 // Checks for temperature
-                switch (plantType) {
-                    case "Cactus":
-                        if (temperatureVal >= 10 && temperatureVal < 27) {
-                            readableTemperatureVal = "Ideal temperature for cacti/desert plants.";
-                        } else if (temperatureVal < 10) {
-                            readableTemperatureVal = "May be too cold for indoor cacti/desert plants.";
-                        }
-                        break;
-                    case "Succulent":
-                        if (temperatureVal >= 35) {
-                            readableTemperatureVal = "Too hot for succulents. Extended exposure may cause damage or death.";
-                        } else if (temperatureVal >= 15 && temperatureVal < 27) {
-                            readableTemperatureVal = "Ideal temperature for succulents.";
-                        } else if (temperatureVal > 10 && temperatureVal < 15) {
-                            readableTemperatureVal = ""; // Nothing special to state about temperature.
-                        } else if (temperatureVal > 5 && temperatureVal <= 10) {
-                            readableTemperatureVal = "Too cold for indoor succulents.";
-                        } else if (temperatureVal >= 0 && temperatureVal <= 5) {
-                            readableTemperatureVal = "Succulents may be damaged by cold.";
-                        } else if (temperatureVal < 0) {
-                            readableTemperatureVal = "Succulents may be damaged or killed by frost.";
-                        }
-                        break;
-                    case "Flower":
-                        if (temperatureVal >= 32) {
-                            readableTemperatureVal = "Too hot for flowers. Extended exposure may cause damage or death.";
-                        } else if (temperatureVal >= 15 && temperatureVal <= 24) {
-                            readableTemperatureVal = "Ideal temperature for flowers.";
-                        } else if (temperatureVal > 10 && temperatureVal < 15) {
-                            readableTemperatureVal = "Cooler temperature for flowers. Generally expected at night.";
-                        } else if (temperatureVal > 1 && temperatureVal <= 10) {
-                            readableTemperatureVal = "Too cold for flowers.";
-                        } else if (temperatureVal >= 0) {
-                            readableTemperatureVal = "Flowers may be damaged or killed by frost.";
-                        }
-                        break;
-                    case "Tender Perennial":
-                        if (temperatureVal <= 15) {
-                            readableTemperatureVal = "Too cold for tender perennials. May damage or kill.";
-                        }
-                        break;
-                    case "Tropical/Subtropical":
-                        if (temperatureVal >= 32) {
-                            readableTemperatureVal = "Too hot for subtropical and tropical plants. Extended exposure may cause damage or death.";
-                        } else if (temperatureVal >= 15 && temperatureVal <= 32) {
-                            readableTemperatureVal = "Ideal for subtropical and tropical plants.";
-                        } else if (temperatureVal > 10 && temperatureVal < 15) {
-                            readableTemperatureVal = ""; // Nothing special to state about temperature.
-                        } else if (temperatureVal >= 4 && temperatureVal < 10) {
-                            readableTemperatureVal = "Prolonged exposure will damage or kill.";
-                        } else if (temperatureVal <= 0 ) {
-                            readableTemperatureVal = "Plant will be killed by frost.";
-                        }
+                if (temperatureVal > plant.getMaxTemp()) {
+                    readableTemperatureVal = "Too hot. May cause damage to plant.";
+                } else if (temperatureVal < plant.getMinTemp()) {
+                    readableTemperatureVal = "Too cold. May cause damage to plant.";
+                } else {
+                    readableTemperatureVal = "Ideal temperature";
                 }
 
                 // Set the text of the text views to the values from the database
                 textView_plantName.setText(plantName);
-                textView_SoilMoisture.setText(soilMoistureVal + readableMoistureVal);
-                textView_Sunlight.setText(sunlightVal + readableSunlightVal);
-                textView_Humidity.setText(df.format(humidityVal) + "%");
-                textView_readableHumid.setText(readableHumidityVal);
-                textView_Temperature.setText(df.format(temperatureVal) + "°C");
-                textView_readableTemp.setText(readableTemperatureVal);
-
-                // For debugging purposes
-                Log.d("PlantHealthActivity", "readPlantHealthValues - plantName: " + plantName);
-                Log.d("PlantHealthActivity", "readPlantHealthValues - plantType: " + plantType);
-                Log.d("PlantHealthActivity", "readPlantHealthValues - soilMoisture: " + snapshot.child("soil_Moisture").getValue().toString());
-                Log.d("PlantHealthActivity", "readPlantHealthValues - visLight: " + snapshot.child("visLight").getValue().toString());
-                Log.d("PlantHealthActivity", "readPlantHealthValues - humidity: " + snapshot.child("humidity").getValue().toString());
-                Log.d("PlantHealthActivity", "readPlantHealthValues - temperature: " + snapshot.child("temperature").getValue().toString());
+                textView_SoilMoistureValue.setText(soilMoistureVal + "%");
+                textView_SoilMoistureStatus.setText(readableMoistureVal);
+                textView_SunlightValue.setText(sunlightVal + " lm");
+                textView_SunlightStatus.setText(readableSunlightVal);
+                textView_HumidityValue.setText(df.format(humidityVal) + "%");
+                textView_HumidityStatus.setText(readableHumidityVal);
+                textView_TemperatureValue.setText(df.format(temperatureVal) + "°C");
+                textView_TemperatureStatus.setText(readableTemperatureVal);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("PlantHealthActivity", "Failed to read values", error.toException());
                 Toast.makeText(PlantHealthActivity.this, "Failed to read values", Toast.LENGTH_SHORT).show();
             }
         });

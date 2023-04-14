@@ -8,7 +8,7 @@ import android.util.Log;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.databinding.ActivityHistoricalDataBinding;
 import com.dmaziarek_tus.plant_monitor_app.model.Plant;
-import com.dmaziarek_tus.plant_monitor_app.util.PlantNamesSingleton;
+import com.dmaziarek_tus.plant_monitor_app.util.PlantListSingleton;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.github.mikephil.charting.animation.Easing;
@@ -38,6 +38,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
     LineChart lineChart;
+    Plant plant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,28 +48,26 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
         allocateActivityTitle("Historical Data");
 
         lineChart = findViewById(R.id.lineChart);   // Get the line chart from the layout
-
         userName = UserUtils.getDisplayNameFromFirebase();
 
+        // Get plant object from previous activity
         Intent intent = getIntent();
-        plantID = intent.getStringExtra("plantID");
-        plantList = PlantNamesSingleton.getInstance().getPlantList();
-        Log.d("HistoricalDataActivity", "plantName: " + plantID);
+        plant = (Plant) intent.getSerializableExtra("plant");
+        // If user does not go through select plant activity, get plant from list
+        plantList = PlantListSingleton.getInstance().getPlantList();
+        Log.d("SelectPlantActivity", "onCreate \nPlant names: " + plantList);
 
-        if (plantList == null) {  // If the plant name list is empty, then the user has not added any plants and will be prompted to add plants
-            PlantUtils.noPlantsAdded(HistoricalDataActivity.this);
-        } else if (plantList.isEmpty()) {
-            PlantUtils.noPlantsAdded(HistoricalDataActivity.this);
-        }
-        // If user goes straight to view plant health and not through select plant (and has plants), then plantName will be null.
-        // This will cause the app to crash, so we need to check if plantName is null and if it is, then we need to get the plant name from the singleton class
-        else if (plantID == null || plantID.isEmpty() || plantID.equals("")) {
-            Log.d("PlantHealthActivity", "Plant names: " + plantList);
-            plantID = plantList.get(0).getPlantID();  // Get the first plant name from the array list
+        if (plant != null) {
+            Log.d("PlantHealthActivity", "Plant retrieved from intent");
+            plantID = plant.getPlantID();
             retrieveDataAndPopulateCharts();
-        }
-        else {
-             retrieveDataAndPopulateCharts();
+        } else if (!plantList.isEmpty()) {
+            Log.d("PlantHealthActivity", "Plant retrieved from list");
+            plant = plantList.get(0);
+            plantID = plant.getPlantID();
+            retrieveDataAndPopulateCharts();
+        } else {
+            PlantUtils.noPlantsAdded(this);
         }
     }
 
@@ -105,7 +104,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // Get the values for humidity, soil moisture, and temperature
                     double humidity = snapshot.child("humidity").getValue(Double.class);
-                    int soilMoisture = snapshot.child("soil_Moisture").getValue(Integer.class);
+                    int soilMoisture = snapshot.child("soilMoisture").getValue(Integer.class);
                     double temperature = snapshot.child("temperature").getValue(Double.class);
 
                     // Add the values to the corresponding array list
