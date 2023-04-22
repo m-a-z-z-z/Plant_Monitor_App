@@ -23,13 +23,13 @@
         android:id="@+id/textView_SoilMoistureLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="Soil Moisture:"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/textView_plantName" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_PlantID" />
 
     <TextView
         android:id="@+id/textView_SoilMoistureValue"
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Sunlight:"
+        android:text="Light:"
         android:textAlignment="textEnd"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -187,5 +187,14 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/change_plant_name_button"
         app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <TextView
+        android:id="@+id/textView_PlantID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant ID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_plantName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

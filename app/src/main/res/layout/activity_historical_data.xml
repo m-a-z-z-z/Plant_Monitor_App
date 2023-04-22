@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvHistoricalData">
         <ImageView
-            android:src="@drawable/card_background2"
+            android:src="@color/material_dynamic_neutral_variant90"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"/>

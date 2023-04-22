@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="preferred_light">
+        <item>Low–light (50–250 lumens)</item>
+        <item>Medium–light (250–1000 lumens)</item>
+        <item>High–light (1000+ lumens)</item>
+    </string-array>
+</resources>

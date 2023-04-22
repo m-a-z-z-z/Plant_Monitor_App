@@ -35,12 +35,12 @@ import java.util.ArrayList;
 
 public class PlantHealthActivity extends DrawerBaseActivity {
     ActivityPlantHealthBinding binding;
-    TextView textView_SoilMoistureValue, textView_SoilMoistureStatus, textView_SunlightValue, textView_SunlightStatus, textView_HumidityValue, textView_HumidityStatus, textView_TemperatureValue, textView_TemperatureStatus, textView_plantName;
+    TextView textView_SoilMoistureValue, textView_SoilMoistureStatus, textView_SunlightValue, textView_SunlightStatus, textView_HumidityValue, textView_HumidityStatus, textView_TemperatureValue, textView_TemperatureStatus, textView_plantName, textView_PlantID;
     FirebaseDatabase database;
-    double soilMoistureVal, sunlightVal, humidityVal, temperatureVal;
+    double soilMoistureVal, lightVal, humidityVal, temperatureVal, uvIndexVal;
     int minTemp, maxTemp;
     int minMoisture, maxMoisture;
-    String readableMoistureVal, readableSunlightVal, readableHumidityVal, readableTemperatureVal, plantID, plantName, plantType, userName, selectedSoilMoisture;
+    String moistureValStatus, lightValStatus, uvValStatus, humidityValStatus, temperatureValStatus, plantID, plantName, plantType, userName, selectedSoilMoisture;
     DecimalFormat df = new DecimalFormat("#.##");
     ArrayList<Plant> plantList = new ArrayList<>();
     Plant plant;
@@ -62,6 +62,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         textView_TemperatureValue = (TextView) findViewById(R.id.textView_TemperatureValue);
         textView_TemperatureStatus = (TextView) findViewById(R.id.textView_TemperatureStatus);
         textView_plantName = (TextView) findViewById(R.id.textView_plantName);
+        textView_PlantID = (TextView) findViewById(R.id.textView_PlantID);
 
         userName = UserUtils.getDisplayNameFromFirebase();
 
@@ -255,62 +256,79 @@ public class PlantHealthActivity extends DrawerBaseActivity {
                 plantName = snapshot.child("plantName").getValue().toString();
                 plantType = snapshot.child("plantType").getValue().toString();
                 soilMoistureVal = Double.valueOf(snapshot.child("soilMoisture").getValue().toString());
-                sunlightVal = Double.valueOf(snapshot.child("visLight").getValue().toString());
+                lightVal = Double.valueOf(snapshot.child("visLight").getValue().toString());
                 humidityVal = Double.valueOf(snapshot.child("humidity").getValue().toString());
                 temperatureVal = Double.valueOf(snapshot.child("temperature").getValue().toString());
+                uvIndexVal = Double.valueOf(snapshot.child("uvLight").getValue().toString());
 
                 // Checks for soil moisture
                 if (soilMoistureVal > plant.getMaxSoilMoisture()) {
-                    readableMoistureVal = "Too wet. Recommended moisture is " + plant.getMaxSoilMoisture() + "% - " + plant.getMinSoilMoisture() + "%";
+                    moistureValStatus = "Too wet. Recommended moisture is " + plant.getMaxSoilMoisture() + "% - " + plant.getMinSoilMoisture() + "%";
                 } else if (soilMoistureVal < plant.getMinSoilMoisture()) {
-                    readableMoistureVal = "Too dry. Recommended moisture is " + plant.getMaxSoilMoisture() + "% - " + plant.getMinSoilMoisture() + "%";
+                    moistureValStatus = "Too dry. Recommended moisture is " + plant.getMaxSoilMoisture() + "% - " + plant.getMinSoilMoisture() + "%";
                 } else {
-                    readableMoistureVal = "Moisture is correct";
+                    moistureValStatus = "Moisture is correct";
                 }
 
-                // Checks for sunlight
-                if (sunlightVal >= 0 && sunlightVal <= 100) {
-                    readableSunlightVal = "Dark";
-                } else if (sunlightVal >= 100 && sunlightVal <= 300) {
-                    readableSunlightVal = "Dim";
-                } else if (sunlightVal >= 300 && sunlightVal <= 500) {
-                    readableSunlightVal = "Bright";
-                } else if (sunlightVal >= 500 && sunlightVal <= 1023) {
-                    readableSunlightVal = "Very bright";
+                // Checks for light levels
+                if (lightVal >= 0 && lightVal <= 100) {
+                    lightValStatus = "Dark";
+                } else if (lightVal >= 100 && lightVal <= 300) {
+                    lightValStatus = "Dim";
+                } else if (lightVal >= 300 && lightVal <= 500) {
+                    lightValStatus = "Bright";
+                } else if (lightVal >= 500 && lightVal <= 1023) {
+                    lightValStatus = "Very bright";
                 } else {
-                    readableSunlightVal = "Error";
+                    lightValStatus = "Error";
                 }
+
+//                // Checks for UV levels
+//                if (uvIndexVal <= 2) {
+//                    uvValStatus = "Low";
+//                } else if (uvIndexVal > 2 && uvIndexVal <= 5) {
+//                    uvValStatus = "Moderate";
+//                } else if (uvIndexVal > 5 && uvIndexVal <= 7) {
+//                    uvValStatus = "High";
+//                } else if (uvIndexVal > 7 && uvIndexVal <= 10) {
+//                    uvValStatus = "Very high";
+//                } else if (uvIndexVal > 10) {
+//                    uvValStatus = "Extreme";
+//                } else {
+//                    uvValStatus = "Error";
+//                }
 
                 // Checks for humidity
                 if (humidityVal >= 0 && humidityVal <= 25) {
-                    readableHumidityVal = "Air is too dry. May cause damage to plant.";
+                    humidityValStatus = "Air is too dry. May cause damage to plant.";
                 } else if (humidityVal > 25 && humidityVal < 39) {
-                    readableHumidityVal = "Consider increasing humidity levels around plant.";
+                    humidityValStatus = "Consider increasing humidity levels around plant.";
                 } else if (humidityVal >= 40 && humidityVal <= 70) {
-                    readableHumidityVal  = "Ideal humidity";
+                    humidityValStatus  = "Ideal humidity";
                 } else if (humidityVal > 90) {
-                    readableHumidityVal = "Too humid. Mold and mildew prone.";
+                    humidityValStatus = "Too humid. Mold and mildew prone.";
                 }
 
                 // Checks for temperature
                 if (temperatureVal > plant.getMaxTemp()) {
-                    readableTemperatureVal = "Too hot. May cause damage to plant.";
+                    temperatureValStatus = "Too hot. May cause damage to plant.";
                 } else if (temperatureVal < plant.getMinTemp()) {
-                    readableTemperatureVal = "Too cold. May cause damage to plant.";
+                    temperatureValStatus = "Too cold. May cause damage to plant.";
                 } else {
-                    readableTemperatureVal = "Ideal temperature";
+                    temperatureValStatus = "Ideal temperature";
                 }
 
                 // Set the text of the text views to the values from the database
                 textView_plantName.setText(plantName);
+                textView_PlantID.setText("ID: " + plantID);
                 textView_SoilMoistureValue.setText(soilMoistureVal + "%");
-                textView_SoilMoistureStatus.setText(readableMoistureVal);
-                textView_SunlightValue.setText(sunlightVal + " lm");
-                textView_SunlightStatus.setText(readableSunlightVal);
+                textView_SoilMoistureStatus.setText(moistureValStatus);
+                textView_SunlightValue.setText(lightVal + " lm");
+                textView_SunlightStatus.setText(lightValStatus);
                 textView_HumidityValue.setText(df.format(humidityVal) + "%");
-                textView_HumidityStatus.setText(readableHumidityVal);
+                textView_HumidityStatus.setText(humidityValStatus);
                 textView_TemperatureValue.setText(df.format(temperatureVal) + "°C");
-                textView_TemperatureStatus.setText(readableTemperatureVal);
+                textView_TemperatureStatus.setText(temperatureValStatus);
             }
 
             @Override

@@ -74,7 +74,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
     private void populateLineChart(ArrayList<Integer> soilMoistureList) {
         ArrayList<Entry> soilMoistureEntries = new ArrayList<>();
 
-        for (int i = 0; i < soilMoistureList.size(); i++) {
+        for (int i = 0; i < soilMoistureList.size(); i += 10) {
             soilMoistureEntries.add(new Entry(i, soilMoistureList.get(i)));
         }
 

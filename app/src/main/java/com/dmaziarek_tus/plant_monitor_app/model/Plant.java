@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class Plant implements Serializable {
     String plantID, plantName, plantType, photoUrl;
-    int soilMoisture, minSoilMoisture, maxSoilMoisture;
+    int soilMoisture, minSoilMoisture, maxSoilMoisture, minLight, maxLight;
     double irLight, uvLight, visLight, humidity, temperature, minTemp, maxTemp;
 
     public Plant() {}
 
-    public Plant(String plantID, String plantName, String plantType, String photoUrl, int minSoilMoisture, int maxSoilMoisture, double minTemp, double maxTemp) {
+    public Plant(String plantID, String plantName, String plantType, String photoUrl, int minSoilMoisture, int maxSoilMoisture, double minTemp, double maxTemp, int minLight, int maxLight) {
         this.plantID = plantID;
         this.plantName = plantName;
         this.plantType = plantType;
@@ -18,6 +18,8 @@ public class Plant implements Serializable {
         this.maxSoilMoisture = maxSoilMoisture;
         this.minTemp = minTemp;
         this.maxTemp = maxTemp;
+        this.minLight = minLight;
+        this.maxLight = maxLight;
         this.soilMoisture = 0;
         this.irLight = 0;
         this.uvLight = 0;
@@ -113,4 +115,8 @@ public class Plant implements Serializable {
     public double getMaxTemp() { return maxTemp; }
 
     public void setMaxTemp(double maxTemp) { this.maxTemp = maxTemp; }
+
+    public int getMinLight() { return minLight; }
+
+    public int getMaxLight() { return maxLight; }
 }

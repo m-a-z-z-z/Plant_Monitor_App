@@ -63,7 +63,9 @@ public class PlantUtils {
                     int maxMoisture = child.child("maxSoilMoisture").getValue(int.class); // Get plant preferred soil moisture
                     double minTemp = child.child("minTemp").getValue(double.class);
                     double maxTemp = child.child("maxTemp").getValue(double.class);
-                    Plant plant = new Plant(plantID, plantName, plantType, photoUrl, minMoisture, maxMoisture, minTemp, maxTemp);
+                    int minLight = child.child("minLight").getValue(int.class);
+                    int maxLight = child.child("maxLight").getValue(int.class);
+                    Plant plant = new Plant(plantID, plantName, plantType, photoUrl, minMoisture, maxMoisture, minTemp, maxTemp, minLight, maxLight);
                     plantList.add(plant);
                     Log.d("PlantUtils", "retrieveUserPlants, onDataChange"
                             + "\nPlant name: " + plantName
@@ -74,6 +76,8 @@ public class PlantUtils {
                             + "\nmax moisture: " + maxMoisture
                             + "\nmin temp: " + minTemp
                             + "\nmax temp: " + maxTemp
+                            + "\nmin light: " + minLight
+                            + "\nmax light: " + maxLight
                     );
                 }
                 Log.d("PlantUtils", "onDataChange - Plant names: " + plantList);

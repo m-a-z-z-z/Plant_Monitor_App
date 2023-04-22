@@ -41,13 +41,13 @@ public class AddPlantActivity extends DrawerBaseActivity {
     EditText editText_PlantName;
     TextView textView_MinTemp, textView_MaxTemp;
     Button button_AddPlant;
-    Spinner spinner_PlantType, spinner_SoilMoisture;
+    Spinner spinner_PlantType, spinner_SoilMoisture, spinner_Light;
     ImageView imageView;
     ProgressBar progressBar;
     SeekBar minTempSeekbar, maxTempSeekbar;
-    String userName, plantID, plantName, selectedPlantType, selectedSoilMoisture, filename;
+    String userName, plantID, plantName, selectedPlantType, selectedSoilMoisture, selectedLight, filename;
     double minTemp, maxTemp;
-    int minMoisture, maxMoisture;
+    int minMoisture, maxMoisture, minLight, maxLight;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap mImageBitmap;
 
@@ -64,6 +64,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
         textView_MaxTemp = (TextView) findViewById(R.id.textView_MaxTemp);
         spinner_PlantType = (Spinner) findViewById(R.id.spinner_PlantType);
         spinner_SoilMoisture = (Spinner) findViewById(R.id.spinner_PreferredMoisture);
+        spinner_Light = (Spinner) findViewById(R.id.spinner_PreferredLight);
         button_AddPlant = (Button) findViewById(R.id.button_AddPlant);
         imageView = (ImageView) findViewById(R.id.imageView_plantPhoto);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -86,9 +87,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
 
         // Set spinner for soil moisture
@@ -101,12 +100,68 @@ public class AddPlantActivity extends DrawerBaseActivity {
                 selectedSoilMoisture = parent.getItemAtPosition(position).toString();
                 Log.d("AddPlantActivity", "onItemSelected: " + selectedSoilMoisture);
                 spinner_SoilMoisture.setOnItemSelectedListener(this);
+                // Translate selected soil moisture to min and max moisture
+                switch (selectedSoilMoisture) {
+                    case "0%-20% (Extremely dry)":
+                        minMoisture = 0;
+                        maxMoisture = 20;
+                        break;
+                    case "21%-40% (Dryish - Well drained)":
+                        minMoisture = 21;
+                        maxMoisture = 40;
+                        break;
+                    case "41%-60% (Tolerates moist soil)":
+                        minMoisture = 41;
+                        maxMoisture = 60;
+                        break;
+                    case "61%-80% (Tolerates wet soil)":
+                        minMoisture = 61;
+                        maxMoisture = 80;
+                        break;
+                    case "81%-100% (Extremely wet)":
+                        minMoisture = 81;
+                        maxMoisture = 100;
+                        break;
+                }
+                Log.d("AddPlantActivity", "onItemSelected - minMoisture: " + minMoisture + " maxMoisture: " + maxMoisture);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView<?> parent) { }
+
+        });
+
+        // Set spinner for light
+        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(this, R.array.preferred_light, android.R.layout.simple_spinner_item);
+        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_Light.setAdapter(adapter3);
+        spinner_Light.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedLight = parent.getItemAtPosition(position).toString();
+                Log.d("AddPlantActivity", "onItemSelected: " + selectedLight);
+                spinner_Light.setOnItemSelectedListener(this);
+
+                // Translate selected light to min and max light
+                switch (selectedLight) {
+                    case "Low–light (50–250 lumens)":
+                        minLight = 50;
+                        maxLight = 250;
+                        break;
+                    case "Medium–light (250–1000 lumens)":
+                        minLight = 250;
+                        maxLight = 1000;
+                        break;
+                    case "High–light (1000+ lumens)":
+                        minLight = 1000;
+                        maxLight = 10000;
+                        break;
+                }
 
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
 
         // Set seekbars for min and max temperature
@@ -152,29 +207,6 @@ public class AddPlantActivity extends DrawerBaseActivity {
         plantID = plantID.replaceAll("\\s+",""); // Remove whitespace as filename cannot contain whitespace
         filename = plantID + ".jpg";    // Used for retrieving photo from storage
 
-        switch (selectedSoilMoisture) {
-            case "0%-20% (Extremely dry)":
-                minMoisture = 0;
-                maxMoisture = 20;
-                break;
-            case "21%-40% (Dryish - Well drained)":
-                minMoisture = 21;
-                maxMoisture = 40;
-                break;
-            case "41%-60% (Tolerates moist soil)":
-                minMoisture = 41;
-                maxMoisture = 60;
-                break;
-            case "61%-80% (Tolerates wet soil)":
-                minMoisture = 61;
-                maxMoisture = 80;
-                break;
-            case "81%-100% (Extremely wet)":
-                minMoisture = 81;
-                maxMoisture = 100;
-                break;
-        }
-
         progressBar.setVisibility(View.VISIBLE);
         button_AddPlant.setVisibility(View.GONE);
 
@@ -182,7 +214,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
     }
 
     public void addPlantToDB(View view) {
-        Plant plant = new Plant(plantID, plantName, selectedPlantType, filename, minMoisture, maxMoisture, minTemp, maxTemp);
+        Plant plant = new Plant(plantID, plantName, selectedPlantType, filename, minMoisture, maxMoisture, minTemp, maxTemp, minLight, maxLight);
         PlantListSingleton.getInstance().addPlant(plant);
 
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(userName).child("Plants");
