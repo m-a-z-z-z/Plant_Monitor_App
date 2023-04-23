@@ -14,6 +14,7 @@ import com.dmaziarek_tus.plant_monitor_app.util.UserUtils;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 public class HistoricalDataActivity extends DrawerBaseActivity {
     ActivityHistoricalDataBinding binding;
     String plantID, userName;
-    double soilMoistureVal, sunlightVal, humidityVal, temperatureVal;
     ArrayList<Plant> plantList = new ArrayList<>();
     ArrayList<Double> humidityList = new ArrayList<>();
     ArrayList<Integer> soilMoistureList = new ArrayList<>();
@@ -73,22 +73,39 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
 
     private void populateLineChart(ArrayList<Integer> soilMoistureList) {
         ArrayList<Entry> soilMoistureEntries = new ArrayList<>();
-
-        for (int i = 0; i < soilMoistureList.size(); i += 10) {
-            soilMoistureEntries.add(new Entry(i, soilMoistureList.get(i)));
+        int startIndex = soilMoistureList.size() - 60;  // Get the most recent data in history (last hour)
+        for (int i = startIndex, j = 1; i < soilMoistureList.size(); i++, j++) {    // j represents minutes
+            soilMoistureEntries.add(new Entry(j, soilMoistureList.get(i)));
         }
 
-        LineDataSet lineDataSet = new LineDataSet(soilMoistureEntries, "");
-        lineDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-
+        LineDataSet lineDataSet = new LineDataSet(soilMoistureEntries, "Soil Moisture");
         LineData data = new LineData(lineDataSet);
+        lineDataSet.setDrawValues(false);   // hides values of each reading above line on chart
+        lineDataSet.setDrawCircles(false);  // hides dots representing reading on line
+        lineDataSet.setLineWidth(2f);
 
-        lineChart.getAxisLeft().setDrawGridLines(false);
+        // Y Axis config
+        YAxis yAxisLeft = lineChart.getAxisLeft();
+        YAxis yAxisRight = lineChart.getAxisRight();
+        yAxisLeft.setAxisMaximum(100);
+        yAxisLeft.setAxisMinimum(0);
+        yAxisRight.setAxisMaximum(100);
+        yAxisRight.setAxisMinimum(0);
+        yAxisLeft.setAxisLineWidth(1.5f);
+        yAxisRight.setAxisLineWidth(1.5f);
+        yAxisRight.setAxisLineColor(ColorTemplate.rgb("#000000"));
+        yAxisLeft.setAxisLineColor(ColorTemplate.rgb("#000000"));
+
+
+        // X Axis config
         XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setAxisLineWidth(1.5f);
+        xAxis.setAxisLineColor(ColorTemplate.rgb("#000000"));
         lineChart.getLegend().setEnabled(true);
-        lineChart.getDescription().setEnabled(false);
+        lineChart.getDescription().setText("Y: Soil moisture (%)\tX: Time (minutes)");
         lineChart.animateX(1500, Easing.EasingOption.EaseInSine);
         lineChart.setData(data); // Set the data to the line chart
         lineChart.invalidate(); // Refresh the line chart
@@ -110,8 +127,8 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
                     // Add the values to the corresponding array list
                     soilMoistureList.add(soilMoisture);
 
-                    populateLineChart(soilMoistureList);
                 }
+                populateLineChart(soilMoistureList);
                 myRef.removeEventListener(this);
             }
 

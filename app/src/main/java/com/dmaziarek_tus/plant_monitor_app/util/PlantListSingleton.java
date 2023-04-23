@@ -33,6 +33,10 @@ public class PlantListSingleton {
         }
     }
 
+    public void emptyList() {
+        plantList.clear();
+    }
+
 //    // Used when the user needs to retrieve all the plants they have added
 //    public ArrayList<String> getPlantNames() {
 //        return plantNameList;

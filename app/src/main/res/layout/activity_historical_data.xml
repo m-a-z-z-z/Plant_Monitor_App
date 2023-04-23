@@ -35,10 +35,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvHistoricalData">
         <ImageView
-            android:src="@color/material_dynamic_neutral_variant90"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"/>
+            android:src="@drawable/graph_background" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
@@ -46,7 +45,7 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_marginTop="100dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
