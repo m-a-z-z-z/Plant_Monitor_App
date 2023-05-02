@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,10 +107,16 @@ public class PlantUtils {
         databaseReference1.child("maxTemp").setValue(maxTemp);
     }
 
-    public static void deletePlantFromDB(String plantID) {
+    public static void deletePlantFromDB(Plant plant) {
+        // Remove from DB
         String userName = UserUtils.getDisplayNameFromFirebase();
-        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants/" + plantID);
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Users/" + userName + "/Plants/" + plant.getPlantID());
         databaseReference1.removeValue();
+
+        // Delete photo from storage
+        String filename = plant.getPhotoUrl();
+        StorageReference mStorageReference = FirebaseStorage.getInstance().getReference("images/"+filename);
+        mStorageReference.delete();
     }
 
     // Not needed anymore but might be useful in the future

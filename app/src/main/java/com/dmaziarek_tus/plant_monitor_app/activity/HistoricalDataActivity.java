@@ -31,9 +31,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
     ActivityHistoricalDataBinding binding;
     String plantID, userName;
     ArrayList<Plant> plantList = new ArrayList<>();
-    ArrayList<Double> humidityList = new ArrayList<>();
     ArrayList<Integer> soilMoistureList = new ArrayList<>();
-    ArrayList<Double> temperatureList = new ArrayList<>();
     DecimalFormat df = new DecimalFormat("#.##");
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
@@ -73,9 +71,9 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
 
     private void populateLineChart(ArrayList<Integer> soilMoistureList) {
         ArrayList<Entry> soilMoistureEntries = new ArrayList<>();
-        int startIndex = soilMoistureList.size() - 60;  // Get the most recent data in history (last hour)
-        for (int i = startIndex, j = 1; i < soilMoistureList.size(); i++, j++) {    // j represents minutes
-            soilMoistureEntries.add(new Entry(j, soilMoistureList.get(i)));
+
+        for (int i = 0; i < soilMoistureList.size(); i++) {
+            soilMoistureEntries.add(new Entry(i, soilMoistureList.get(i)));
         }
 
         LineDataSet lineDataSet = new LineDataSet(soilMoistureEntries, "Soil Moisture");
@@ -105,7 +103,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
         xAxis.setAxisLineWidth(1.5f);
         xAxis.setAxisLineColor(ColorTemplate.rgb("#000000"));
         lineChart.getLegend().setEnabled(true);
-        lineChart.getDescription().setText("Y: Soil moisture (%)\tX: Time (minutes)");
+        lineChart.getDescription().setText("Y: Soil moisture (%)\tX: Reading number");
         lineChart.animateX(1500, Easing.EasingOption.EaseInSine);
         lineChart.setData(data); // Set the data to the line chart
         lineChart.invalidate(); // Refresh the line chart
@@ -128,6 +126,7 @@ public class HistoricalDataActivity extends DrawerBaseActivity {
                     soilMoistureList.add(soilMoisture);
 
                 }
+                Log.d("HistoricalDataActivity", "onDataChange: " + soilMoistureList.size());
                 populateLineChart(soilMoistureList);
                 myRef.removeEventListener(this);
             }

@@ -37,6 +37,8 @@ public class PlantHealthActivity extends DrawerBaseActivity {
     ActivityPlantHealthBinding binding;
     TextView textView_SoilMoistureValue, textView_SoilMoistureStatus, textView_SunlightValue, textView_SunlightStatus, textView_HumidityValue, textView_HumidityStatus, textView_TemperatureValue, textView_TemperatureStatus, textView_plantName, textView_PlantID;
     FirebaseDatabase database;
+    DatabaseReference myRef;
+    private ValueEventListener valueEventListener; // Used to remove the listener if the plant is deleted
     double soilMoistureVal, lightVal, humidityVal, temperatureVal, uvIndexVal;
     int minTemp, maxTemp;
     int minMoisture, maxMoisture;
@@ -101,8 +103,12 @@ public class PlantHealthActivity extends DrawerBaseActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                PlantUtils.deletePlantFromDB(plantID);
+                if(valueEventListener != null) {
+                    myRef.removeEventListener(valueEventListener);
+                }
+                PlantUtils.deletePlantFromDB(plant);
                 PlantListSingleton.getInstance().removePlant(plantID);
+                plantList = PlantListSingleton.getInstance().getPlantList();
                 Log.d("PlantHealthActivity", "Plant names: " + plantList);
                 Toast.makeText(PlantHealthActivity.this, "Plant deleted", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(PlantHealthActivity.this, DashboardActivity.class);
@@ -249,8 +255,9 @@ public class PlantHealthActivity extends DrawerBaseActivity {
 
     private void readPlantHealthValues() {
         database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Users/" + userName + "/Plants/" + plantID);
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef = database.getReference("Users/" + userName + "/Plants/" + plantID);
+
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 plantName = snapshot.child("plantName").getValue().toString();
@@ -329,6 +336,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
                 textView_HumidityStatus.setText(humidityValStatus);
                 textView_TemperatureValue.setText(df.format(temperatureVal) + "°C");
                 textView_TemperatureStatus.setText(temperatureValStatus);
+
             }
 
             @Override
@@ -336,6 +344,7 @@ public class PlantHealthActivity extends DrawerBaseActivity {
                 Log.e("PlantHealthActivity", "Failed to read values", error.toException());
                 Toast.makeText(PlantHealthActivity.this, "Failed to read values", Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+        myRef.addValueEventListener(valueEventListener);
     }
 }

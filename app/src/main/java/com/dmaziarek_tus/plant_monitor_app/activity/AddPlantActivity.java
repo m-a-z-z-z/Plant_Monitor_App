@@ -2,6 +2,7 @@ package com.dmaziarek_tus.plant_monitor_app.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
@@ -225,6 +226,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
                         Toast.makeText(AddPlantActivity.this, "Plant added successfully", Toast.LENGTH_LONG).show();
                         Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant added to database");
                         PlantUtils.plantSelected(this, plant);
+                        finish();
                     } else {
                         Toast.makeText(AddPlantActivity.this, "Error adding plant. Does plant in that name already exist?", Toast.LENGTH_LONG).show();
                         Log.d("AddPlantActivity", "onButtonAddPlantClicked - Plant not added to database");
@@ -240,7 +242,6 @@ public class AddPlantActivity extends DrawerBaseActivity {
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
 
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -254,6 +255,7 @@ public class AddPlantActivity extends DrawerBaseActivity {
         if (mImageBitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
             byte[] data = baos.toByteArray();
 
             StorageReference imagesRef = FirebaseStorage.getInstance().getReference().child("images/" + photoName);

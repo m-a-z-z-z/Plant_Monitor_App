@@ -1,5 +1,6 @@
 package com.dmaziarek_tus.plant_monitor_app.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +12,11 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.dmaziarek_tus.plant_monitor_app.R;
 import com.dmaziarek_tus.plant_monitor_app.util.PlantUtils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
-
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +27,22 @@ public class SplashActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);   // Hide status bar
 
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    Log.i("SplashActivity", "No user signed in");
+                }
+            }
+        };
+
+        mAuth.addAuthStateListener(mAuthListener);
         if (mAuth.getCurrentUser() != null) {
             Log.i("SplashActivity", "User is signed in");
-            PlantUtils.retrieveUserPlants();    // When user restarts app, plantNameList will null, so we need to retrieve the list again
+            PlantUtils.retrieveUserPlants();
         }
+
         // Animations for splash screen
         lottieAnimationView.animate().translationY(-1500).setDuration(1000).setStartDelay(2500);
         textView.animate().translationY(1000).setDuration(1000).setStartDelay(2500);
@@ -57,3 +71,4 @@ public class SplashActivity extends AppCompatActivity {
         thread.start();
     }
 }
+

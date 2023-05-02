@@ -28,8 +28,9 @@ public class LogoutActivity extends DrawerBaseActivity {
                 e.printStackTrace();
             } finally {
                 Intent intent = new Intent(LogoutActivity.this, WelcomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clear the activity stack (all activities below the WelcomeActivity) so that the user cannot navigate back to the logout screen
                 startActivity(intent);
-                finish();   // finish() is used to destroy the activity, will stop the user navigating back to the splash screen
+                finishAffinity();   // Close all activities
             }
             }
         };
